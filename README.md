@@ -1,16 +1,7 @@
-# 1617-1
-Repositório público do semestre de Inverno de 2016/2017
+# 1617-1-LI41N-G15
 
-Examplo de items
-* item 1
-* item 2
-* item 3
+Repositório privado do grupo 15
+semestre de Inverno de 2016/2017
 
-**negrito**
-_italico_
+Marcelo Correa - 26958
 
-## header 2
-
-### header 3
-
-[ISEL](http://www.isel.pt)
