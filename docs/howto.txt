@@ -1,0 +1,8 @@
+git clone https://github.com/isel-leic-ls/1617-1-LI41N-G15.git
+cd 1617-1-LI41N-G15
+git remote add common https://github.com/isel-leic-ls/1617-1-common
+git pull common master
+git commit -m 'first commit'
+git push origin master
+
+
