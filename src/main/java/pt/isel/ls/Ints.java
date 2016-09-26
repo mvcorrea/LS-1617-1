@@ -14,6 +14,8 @@ public class Ints {
         int high = toIndex - 1;
         int mid;
 
+	if(high <= a.length) return -1;
+
         while(low < high){
             mid = high + low / 2 + 1;
             if(n > a[mid]) low = mid + 1;

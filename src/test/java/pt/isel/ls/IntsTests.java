@@ -15,6 +15,11 @@ public class IntsTests {
     }
 
     @Test
+    public void test_array_boundaries(){
+	
+    }
+
+    @Test
     public void indexOfBinary_returns_negative_if_not_found(){
         // Arrange
         int[] v = {1,2,3};
