@@ -10,14 +10,15 @@ public class Ints {
         if (fromIndex > toIndex)
             throw new IllegalArgumentException("from(" + fromIndex + ") > to(" + toIndex + ")");
 
+//        if(toIndex > a.length)
+//            throw new IllegalArgumentException("arr size(" + a.length + ") < to(" + toIndex + ")");
+
         int low = fromIndex;
-        int high = toIndex - 1;
+        int high = toIndex;
         int mid;
 
-	if(high <= a.length) return -1;
-
-        while(low < high){
-            mid = high + low / 2 + 1;
+        while(low <= high){
+            mid = low + (high - low) / 2;
             if(n > a[mid]) low = mid + 1;
             else if(n < a[mid]) high = mid - 1;
             else return mid;
