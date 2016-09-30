@@ -8,12 +8,16 @@ public class Ints {
     public static int indexOfBinary(int[] a, int fromIndex, int toIndex, int n) {
 
         if (fromIndex > toIndex)
-            throw new IllegalArgumentException("from(" + fromIndex + ") > to(" + toIndex + ")");
+            throw new IllegalArgumentException("> from(" + fromIndex + ") > to(" + toIndex + ")");
 
-//        if(toIndex > a.length)
-//            throw new IllegalArgumentException("arr size(" + a.length + ") < to(" + toIndex + ")");
+        if(toIndex > a.length)
+            throw new IllegalArgumentException("> error in left bound index: [" + toIndex + "]");
 
-        int low = fromIndex;
+        if(fromIndex < 0)
+            throw new IllegalArgumentException("> error in right bound index: [" + fromIndex + "]");
+
+
+        int low  = fromIndex;
         int high = toIndex;
         int mid;
 
@@ -23,6 +27,7 @@ public class Ints {
             else if(n < a[mid]) high = mid - 1;
             else return mid;
         }
+
         return -1;
     }
 }

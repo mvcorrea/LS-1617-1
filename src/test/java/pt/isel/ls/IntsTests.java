@@ -14,13 +14,11 @@ public class IntsTests {
         assertEquals(-1, Ints.max(-2,-1));
     }
 
-    @Test //(expected=IllegalArgumentException.class)      // ASK: how to filter exeptions!!
+    @Test (expected=IllegalArgumentException.class)
     public void verify_array_boundaries() {
         int[] v = {1,2,3};
-        int t0 = Ints.indexOfBinary(v,-1,2,2);
-        assertTrue(t0 == 1);
-        int t1 = Ints.indexOfBinary(v,0,5,2);
-        assertTrue(t1 == 1);
+        Ints.indexOfBinary(v,-1,2,2);
+        Ints.indexOfBinary(v,0,v.length+1,2);
     }
 
     @Test

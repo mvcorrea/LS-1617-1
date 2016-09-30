@@ -1,0 +1,19 @@
+# mysql.server start
+# mysql -u root -p
+#Enter password:
+# show databases;
+# use mysql;
+# show tables;
+# single command
+# mysql -u root -p -e 'show databases;'
+# mysql -u root -p -e "create database testdb";
+#
+# DROP DATABASE ls
+# CREATE DATABASE LS
+# describe Movies
+
+
+
+# usage
+mysql -h <host> -u <username> -p < create_mysql.sql
+
