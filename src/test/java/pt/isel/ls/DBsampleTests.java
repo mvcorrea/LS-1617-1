@@ -1,6 +1,8 @@
 package pt.isel.ls;
 
 import org.junit.Test;
+import pt.isel.ls.Exceptions.*;
+
 import static org.junit.Assert.*;
 
 import java.sql.Connection;
@@ -18,7 +20,7 @@ public class DBsampleTests {
 
     // test insert
     @Test
-    public void testDB_Ins() throws SQLException {
+    public void testDB_Ins() throws SQLException, GenericExeption {
         DBConn db = new DBConn();
         Connection dbconn = db.getDataSource().getConnection();
 
@@ -37,7 +39,7 @@ public class DBsampleTests {
 
     // test update
     @Test
-    public void testDB_Upd() throws SQLException {
+    public void testDB_Upd() throws SQLException, GenericExeption  {
         DBConn db = new DBConn();
         Connection dbconn = db.getDataSource().getConnection();
 
@@ -55,7 +57,7 @@ public class DBsampleTests {
 
     // test delete
     @Test
-    public void testDB_Del() throws SQLException {
+    public void testDB_Del() throws SQLException, GenericExeption  {
         DBConn db = new DBConn();
         Connection dbconn = db.getDataSource().getConnection();
 

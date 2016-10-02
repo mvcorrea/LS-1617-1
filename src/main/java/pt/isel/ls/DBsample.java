@@ -1,6 +1,6 @@
 package pt.isel.ls;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import pt.isel.ls.Exceptions.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,24 +11,25 @@ import java.util.LinkedList;
 public class DBsample {
 
 
-    public static LinkedList<String[]> testSelect(Connection con, String qry) throws SQLException {
-//        String qry1 = "SELECT COUNT(*) FROM Alunos";
-//        String qry2 = "SELECT * FROM Alunos";
+    public static LinkedList<String[]> testSelect(Connection con, String qry) throws SQLException, GenericExeption {
         LinkedList<String[]> sqlData = new LinkedList<>();
 
         try {
-
             PreparedStatement preparedStatement = con.prepareStatement(qry);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-
-                String[] data = new String[]{String.valueOf(rs.getInt("alId")), String.valueOf(rs.getInt("alNumber")), rs.getString("alName")};
+                String[] data = new String[]{   String.valueOf(rs.getInt("alId")),
+                                                String.valueOf(rs.getInt("alNumber")),
+                                                rs.getString("alName")};
                 sqlData.add( data );
             }
 
+            //if(sqlData.size() == 0 ) throw new GenericException("sql query with no return");  // TESTING
+
         } catch (SQLException e) {
-            System.out.println(e);
+            //System.out.println(e);  // TODO: ! NOT TO BE HERE ! REPEAT ON OTHERS !!
+            throw new SQLException("bla, bla, bla");
         }
         return sqlData;
     }
