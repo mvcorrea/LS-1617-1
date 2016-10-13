@@ -7,10 +7,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
-// command sample: POST /checklists/1/tasks name=task1&description=my+task+descr&dueDate=20160920+1400
+// command sample: POST /checklists name=chklist1&description=my+chklst+descr&dueDate=20160920+1400
 
-public class CMD_PostCheckLst implements CommandInterface {
-    public static String pattern = "(POST /checklists)";
+public class CMD_PostTask2CheckLst implements CommandInterface {
+    public static String pattern = "(POST /checklists/\\d+/tasks)";
 
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
@@ -26,6 +26,6 @@ public class CMD_PostCheckLst implements CommandInterface {
     }
 
     @Override public String toString(){
-        return "POST /checklists - creates a new checklist.\n";
+        return "POST /checklists/{cid}/tasks - creates a new task in the checklist 'cid'.\n";
     }
 }

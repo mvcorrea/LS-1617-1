@@ -1,7 +1,10 @@
-package pt.isel.ls;
+package pt.isel.ls.Helpers;
 
 // using MySQL here !
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DBConn {
 
@@ -15,8 +18,8 @@ public class DBConn {
         dataSource.setDatabaseName(System.getenv("LS_DB_NAME"));
     }
 
-    public static MysqlDataSource getDataSource(){
-        return dataSource;
+    public static Connection getDataSource() throws SQLException {
+        return dataSource.getConnection();
     }
 
 }
