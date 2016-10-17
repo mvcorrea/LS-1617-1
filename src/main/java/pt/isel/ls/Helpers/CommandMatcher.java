@@ -31,8 +31,8 @@ public class CommandMatcher {
         // POST /templates/{tid}/create
         // GET /templates
         // GET /templates/{tid}
-        // GET /checklists/closed
-        // GET /checklists/open/sorted/duedate
+        addCommand(new CMD_GetCheckLstClosed());    // GET /checklists/closed
+        addCommand(new CMD_GETCheckLstUncompletedDueDate());    // GET /checklists/open/sorted/duedate
         // GET /checklists/open/sorted/noftasks
     }
 

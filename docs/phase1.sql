@@ -36,6 +36,9 @@ CREATE TABLE task (
 
 -- populating
 INSERT INTO chklst (chkName, chkDesc) VALUES ('Almocos', 'Almocos da semana');
+INSERT INTO chklst (chkName, chkDesc, chkDueDate) VALUES ('Peq Almoços', 'pequenos Almocos da semana', '2016-10-15 16:00');
+INSERT INTO chklst (chkName, chkDesc, chkDueDate) VALUES ('Jantares', 'Jantares da semana', '2016-10-05 13:00');
+INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc, tskDueDate) VALUES (4, 0, 'almoco 2a feira', 'comer tiras na Povoa da Galega na 2a. feira', '2016-10-03 13:00');
 
 SET @last = IFNULL(0, (SELECT MAX(tskOrder) FROM task WHERE tskChkId = 1)); -- SELECT @last;
 INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc, tskDueDate) VALUES (1,(@last := @last + 1), 'almoco 2a feira', 'comer tiras na Povoa da Galega na 2a. feira', '2016-10-03 13:00');
