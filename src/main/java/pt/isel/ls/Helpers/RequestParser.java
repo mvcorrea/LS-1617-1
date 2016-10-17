@@ -38,6 +38,8 @@ public class RequestParser {
 
             this.params = parseParams(args[2]);
         }
+
+        // auto show the request object (for debugging)
         System.out.println(toString());
     }
 

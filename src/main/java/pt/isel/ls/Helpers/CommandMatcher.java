@@ -5,6 +5,7 @@ import pt.isel.ls.Exceptions.GenericException;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommandMatcher {
 
@@ -23,7 +24,7 @@ public class CommandMatcher {
         addCommand(new CMD_PostCheckLst());         // POST /checklists
         addCommand(new CMD_GetCheckLst());          // GET  /checklists
         addCommand(new CMD_PostTask2CheckLst());    // POST /checklists/{cid}/tasks
-        // addCommand(new CMD_PostTaskChange State()) // POST /checklists/{cid}/tasks/{lid}
+        addCommand(new CMD_PostChangeStatus());     // POST /checklists/{cid}/tasks/{lid}
         addCommand(new CMD_GetCheckLstDetail());    // GET  /checklists/{cid}
         // addCommand(new CMD_PostTemplates());        // POST /templates
         // POST /templates/{tid}/tasks
@@ -41,13 +42,18 @@ public class CommandMatcher {
         LinkedList<CommandWrapper> out = new LinkedList<>();
 
         resources.stream().forEach( cmd -> {
-            Matcher m = cmd.getCmd().getPattern().matcher(cmdIn);
+            //  Matcher m = cmd.getCmd().getPattern().matcher(cmdIn);
+            // if(m.matches()) out.add(cmd);
+
+            Pattern pat = cmd.getCmd().getPattern();
+            if(pat == null) return;  // a new command returns null as default
+            Matcher m = pat.matcher(cmdIn);
             if(m.matches()) out.add(cmd);
         });
 
-        System.out.println(out.size());
+        //System.out.println(out.size());
         out.stream().forEach(p -> System.out.println(p.getCmd().getPattern()));  // the resulting list
-        //if(out.size() == 0) throw new GenericException("matchCommand: invalid command error");
+        if(out.size() == 0) throw new GenericException("matchCommand: invalid command error");
         if(out.size() != 1) throw new GenericException("matchCommand: ["+ cmdIn +"] command match error");
         return out.getFirst();
     }
