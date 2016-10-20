@@ -15,7 +15,7 @@ public class CommandMatcher {
     // instantiating this constructor will buils the resources list
     public CommandMatcher() { addAllCommands(); }
 
-    // add single command
+    // fill single command
     public void addCommand(CommandInterface x){ resources.add(new CommandWrapper(x)); }
 
     // group of all commands
@@ -32,7 +32,7 @@ public class CommandMatcher {
         // GET /templates
         // GET /templates/{tid}
         addCommand(new CMD_GetCheckLstClosed());    // GET /checklists/closed
-        addCommand(new CMD_GETCheckLstUncompletedDueDate());    // GET /checklists/open/sorted/duedate
+        addCommand(new CMD_GETCheckLstOpenDueDate());    // GET /checklists/open/sorted/duedate
         // GET /checklists/open/sorted/noftasks
     }
 
@@ -43,7 +43,7 @@ public class CommandMatcher {
 
         resources.stream().forEach( cmd -> {
             //  Matcher m = cmd.getCmd().getPattern().matcher(cmdIn);
-            // if(m.matches()) out.add(cmd);
+            // if(m.matches()) out.fill(cmd);
 
             Pattern pat = cmd.getCmd().getPattern();
             if(pat == null) return;  // a new command returns null as default

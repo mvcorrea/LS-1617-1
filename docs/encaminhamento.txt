@@ -1,0 +1,34 @@
+Parsing do request:
+
+a recepção de um comando, é instanciada a classe "RequestParser" que ira te os seguntes campos.
+POST /checklists name=XXX&description=YYY
+
+- method(string) : como o metodo utilizado ex: GET
+- path(array)    : com o array contendo toas as posições do path ex:[checklists]
+- params(hashmap): com o mapa dos parametros enviados se existirem {name = XXX, description = YYY}
+
+
+Encaminhamento:
+
+O encaminhamento eh feito na classe "ProcessCmd" que instancia a classe "CommandMatcher".
+
+Foi criada a classe "CommandWrapper" como contentor de commandos, e eh criada uma lista com todos os commandos disponiveis.
+
+o metodo "matchCommand" que recebe com input o par metodo+path e escolhe o commando associado ao input da lista criada anteriormente.
+
+
+Processamento de pedidos:
+
+apos o encaminhamento ser finalizado, temos uma instancia de "CommandWrapper" com a com o comando efectuado.
+
+todos os comando implementam a interface "CommandInterface" que disponibiliza o methodo "process".
+
+o metodo process recebe como argumentos a coneção a DB e o objecto "RequestParser" com o request original.
+
+este ira processar o pedido, instanciando o tipo da resposta e o populando com o resultado da iteração com a DB.
+
+
+
+
+
+

@@ -4,7 +4,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import pt.isel.ls.Helpers.RequestParser;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -12,12 +14,14 @@ import java.util.LinkedList;
 
 public class CheckList {
     int chkId;
-    String chkName, chkDesc;
-    Timestamp chkDueDate;
-    boolean chkIsCompleted;
+    public String chkName, chkDesc;
+    public Timestamp chkDueDate;
+    public boolean chkIsCompleted;
     LinkedList<Task> tasks = new LinkedList<>();
 
     public CheckList(){}
+
+    // TODO: ASK if all checklist actualization could stay here?
 
     public CheckList(int chkId, String chkName, String chkDesc, Timestamp chkDueDate, boolean chkIsCompleted) {
         this.chkId = chkId;
@@ -27,7 +31,7 @@ public class CheckList {
         this.chkIsCompleted = chkIsCompleted;
     }
 
-    public CheckList add(ResultSet rs) throws SQLException {
+    public CheckList fill(ResultSet rs) throws SQLException {
         this.chkId = rs.getInt("chkId");
         this.chkName = rs.getString("chkname");
         this.chkDesc = rs.getString("chkDesc");
@@ -64,10 +68,12 @@ public class CheckList {
         obj.put("chkDesc", this.chkDesc);
         obj.put("chkDueDate", this.chkDueDate);
         obj.put("chkIsCompleted", this.chkIsCompleted);
-        try {
-            obj.put("chkTasks", lst2JsonArr());
-        } catch (ParseException e) {
-            e.printStackTrace();            // TODO: manage exceptions :)
+        if(tasks.size() != 0){ // only show tasks when in detail
+            try {
+                obj.put("chkTasks", lst2JsonArr());
+            } catch (ParseException e) {
+                e.printStackTrace();            // TODO: manage exceptions :)
+            }
         }
         return this.getClass().getSimpleName() +": "+ obj.toJSONString();
         // check: http://jsonviewer.stack.hu/

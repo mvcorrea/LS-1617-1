@@ -4,6 +4,7 @@ import org.json.simple.parser.ParseException;
 import pt.isel.ls.Containers.CheckList;
 import pt.isel.ls.Exceptions.GenericException;
 import pt.isel.ls.Helpers.CommandInterface;
+import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
@@ -13,32 +14,35 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
-public class CMD_GETCheckLstUncompletedDueDate implements CommandInterface {
+// command sample: GET /checklists/open/sorted/duedate
+
+public class CMD_GETCheckLstOpenDueDate implements CommandInterface {
     public static String pattern = "(GET /checklists/open/sorted/duedate)";
+    public LinkedList<CheckList> cls = new LinkedList<>();
 
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
-    // SELECT * FROM chklst LEFT JOIN task ON chklst.chkId = task.tskChkId AND chkIsCompleted = false;
-
-
+    // TODO: verify All Exception
 
     @Override
-    public void process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
-        // ?????? json doesnt have the notion of order! to maintain like this MUST sort in the client ???????
-        String query1 = "SELECT * FROM chklst WHERE chkIsCompleted = false ORDER BY chkDueDate";
-        // with tasks
-        String query2 = "SELECT * FROM chklst JOIN task ON chklst.chkId = task.tskChkId AND chklst.chkIsCompleted = false;";
+    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+        String query = "SELECT * FROM chklst WHERE chkIsCompleted = false ORDER BY chkDueDate";
 
-        LinkedList<CheckList> cls = new LinkedList<>();
-        PreparedStatement preparedStatement = con.prepareStatement(query2);
-        ResultSet rs = preparedStatement.executeQuery();
+        PreparedStatement ps = con.prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
 
-        while(rs.next()) cls.add(new CheckList().add(rs));
+        while(rs.next()) cls.add(new CheckList().fill(rs));
 
         cls.forEach(System.out::println);
 
-        preparedStatement.close();
+        ps.close();
+        return new CommandWrapper(this);
+    }
+
+    @Override
+    public Object getData() {
+        return cls;
     }
 
     @Override

@@ -3,6 +3,7 @@ package pt.isel.ls.Commands;
 import org.json.simple.parser.ParseException;
 import pt.isel.ls.Exceptions.GenericException;
 import pt.isel.ls.Helpers.CommandInterface;
+import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
@@ -20,10 +21,10 @@ public class CMD_PostChangeStatus implements CommandInterface{
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
-
+    // TODO: verify All Exception
 
     @Override
-    public void process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
         String query1 = "SELECT * FROM chklst JOIN task ON chklst.chkId = task.tskChkId WHERE tskId = ?";
         String query2 = "UPDATE task SET tskIsCompleted = ? WHERE tskId = ?";
 
@@ -46,6 +47,12 @@ public class CMD_PostChangeStatus implements CommandInterface{
             System.out.println("updated Task with id: "+ tskId +" on checklist: "+ chkId);
         } else System.out.println("unable to find task: "+ tskId +" in checklist: "+chkId);
 
+        return null;
+    }
+
+    @Override
+    public Object getData() {
+        return null;
     }
 
     @Override

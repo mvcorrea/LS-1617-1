@@ -1,10 +1,10 @@
 package pt.isel.ls.Commands;
 
-
 import org.json.simple.parser.ParseException;
 import pt.isel.ls.Containers.CheckList;
 import pt.isel.ls.Exceptions.GenericException;
 import pt.isel.ls.Helpers.CommandInterface;
+import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
@@ -14,26 +14,37 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
+// command sample: GET /checklists/closed
+
 public class CMD_GetCheckLstClosed implements CommandInterface{
     public static String pattern = "(GET /checklists/closed)";
+    public LinkedList<CheckList> cls = new LinkedList<>();
 
     @Override
     public Pattern getPattern() {
         return Pattern.compile(pattern);
     }
 
-    @Override
-    public void process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
-        String query1 = "SELECT * FROM chklst WHERE chkIsCompleted = TRUE";
-        LinkedList<CheckList> cls = new LinkedList<>();
-        PreparedStatement preparedStatement = con.prepareStatement(query1);
-        ResultSet rs = preparedStatement.executeQuery();
+    // TODO: verify All Exception
 
-        while(rs.next()) cls.add(new CheckList().add(rs));
+    @Override
+    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+        String query = "SELECT * FROM chklst WHERE chkIsCompleted = TRUE";
+
+        PreparedStatement ps = con.prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()) cls.add(new CheckList().fill(rs));
 
         cls.forEach(System.out::println);
 
-        preparedStatement.close();
+        ps.close();
+        return new CommandWrapper(this);
+    }
+
+    @Override
+    public Object getData() {
+        return cls;
     }
 
     @Override

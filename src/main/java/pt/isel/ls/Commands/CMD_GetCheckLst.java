@@ -1,7 +1,9 @@
 package pt.isel.ls.Commands;
 
 import pt.isel.ls.Containers.CheckList;
+import pt.isel.ls.Exceptions.GenericException;
 import pt.isel.ls.Helpers.CommandInterface;
+import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
@@ -14,34 +16,47 @@ import java.util.regex.Pattern;
 // command sample: GET /checklists
 
 public class CMD_GetCheckLst implements CommandInterface {
-
     public static String pattern = "(GET /checklists)";
-    public RequestParser cmd;
-    private Connection conn;
+
+
+    public LinkedList<CheckList> cls = new LinkedList<>();
 
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
+
+    // TODO: verify All Exception
+
     @Override
-    public void process(Connection con, RequestParser cmd) throws SQLException {
+    public CommandWrapper process(Connection con, RequestParser cmd) throws SQLException, GenericException {
         String query = "SELECT * FROM chklst";
-        LinkedList<CheckList> cls = new LinkedList<>();
-        PreparedStatement preparedStatement = con.prepareStatement(query);
-        ResultSet rs = preparedStatement.executeQuery();
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
 
-        while(rs.next()) cls.add(new CheckList().add(rs));
+            ResultSet rs = ps.executeQuery();
 
-        cls.forEach(System.out::println);
+            while(rs.next()) cls.add(new CheckList().fill(rs));
 
-        preparedStatement.close();
+            if(cls.isEmpty()) throw new GenericException("CMD_GetCheckLst: no checklist available");
+
+            cls.forEach(System.out::println);
+
+            ps.close();
+        } catch (SQLException e){
+            throw new GenericException("SQL: "+ e.toString());
+        }
+        return new CommandWrapper(this);
     }
 
+    public Object getData(){ return cls; }
+
     @Override
-    public boolean validate(RequestParser par) {
+    public boolean validate(RequestParser par) throws GenericException {
         return false;
     }
 
-    @Override public String toString(){
+    @Override
+    public String toString(){
         return "GET /checklists - returns a list with all the checklists.\n";
     }
 }

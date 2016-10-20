@@ -3,6 +3,7 @@ package pt.isel.ls.Commands;
 //import org.json.simple.parser.ParseException;
 import pt.isel.ls.Exceptions.GenericException;
 import pt.isel.ls.Helpers.CommandInterface;
+import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
@@ -19,27 +20,37 @@ import java.util.regex.Pattern;
 
 public class CMD_PostCheckLst implements CommandInterface {
     public static String pattern = "(POST /checklists)";
+    public int chkId;
 
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
+    // TODO: verify All Exception
+
     @Override
-    public void process(Connection con, RequestParser par) throws SQLException, GenericException, org.json.simple.parser.ParseException, ParseException {
+    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, org.json.simple.parser.ParseException, ParseException {
         String query = "INSERT INTO chklst (chkName, chkDesc, chkDueDate) VALUES (?, ?, ?)";
         PreparedStatement preparedStatement = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, par.getParams().get("name"));
         preparedStatement.setString(2, par.getParams().get("description"));
-        preparedStatement.setTimestamp(3, str2ts(par.getParams().get("dueDate")));
+        preparedStatement.setTimestamp(3, par.getParams().get("dueDate") != null ? str2ts(par.getParams().get("dueDate")) : null);
         preparedStatement.execute();
         ResultSet rs = preparedStatement.getGeneratedKeys();
         int chkId = rs.next() ? rs.getInt(1) : 0;
         System.out.println("created post with id: "+ chkId);
+        this.chkId = chkId;
+        return null;
     }
 
+    @Override
+    public Object getData() {
+        return null;
+    }
 
-    public Timestamp str2ts(String datetime) throws ParseException, ParseException {
+    // NOT TO BE HERE, USED IN MANY CLASSES :)
+    public Timestamp str2ts(String datetime) throws ParseException {
         //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd+hhmm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd+hhmm");  // MUST USE THIS FORMAT
         Date parsedDate = dateFormat.parse(datetime);
         return new java.sql.Timestamp(parsedDate.getTime());
     }
