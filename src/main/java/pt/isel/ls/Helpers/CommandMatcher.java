@@ -20,20 +20,21 @@ public class CommandMatcher {
 
     // group of all commands
     public void addAllCommands(){  // include all commands here
-        addCommand(new CMD_ProgramRun());           // EMPTY (on the matchCommand function)
-        addCommand(new CMD_PostCheckLst());         // POST /checklists
-        addCommand(new CMD_GetCheckLst());          // GET  /checklists
-        addCommand(new CMD_PostTask2CheckLst());    // POST /checklists/{cid}/tasks
-        addCommand(new CMD_PostChangeStatus());     // POST /checklists/{cid}/tasks/{lid}
-        addCommand(new CMD_GetCheckLstDetail());    // GET  /checklists/{cid}
-        // addCommand(new CMD_PostTemplates());        // POST /templates
+        // Phase 01
+        addCommand(new CMD_ProgramRun());               // EMPTY (on the matchCommand function)
+        addCommand(new CMD_PostCheckLst());             // POST /checklists
+        addCommand(new CMD_GetCheckLst());              // GET  /checklists
+        addCommand(new CMD_PostTask2CheckLst());        // POST /checklists/{cid}/tasks
+        addCommand(new CMD_PostChangeStatus());         // POST /checklists/{cid}/tasks/{lid}
+        addCommand(new CMD_GetCheckLstDetail());        // GET  /checklists/{cid}
+        // addCommand(new CMD_PostTemplates());         // POST /templates
         // POST /templates/{tid}/tasks
         // POST /templates/{tid}/create
-        // GET /templates
-        // GET /templates/{tid}
-        addCommand(new CMD_GetCheckLstClosed());    // GET /checklists/closed
-        addCommand(new CMD_GETCheckLstOpenDueDate());    // GET /checklists/open/sorted/duedate
-        // GET /checklists/open/sorted/noftasks
+        addCommand(new CMD_GetTemplate());              // GET /templates
+        addCommand(new CMD_GetTemplateDetail());        // GET /templates/{tid}
+        addCommand(new CMD_GetCheckLstClosed());        // GET /checklists/closed
+        addCommand(new CMD_GETCheckLstOpenDueDate());   // GET /checklists/open/sorted/duedate
+        addCommand(new CMD_GETCheckLstOpenNumTsks());   // GET /checklists/open/sorted/noftasks
     }
 
     // list of matched commands given an command line input

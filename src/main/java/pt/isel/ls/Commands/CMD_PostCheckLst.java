@@ -28,7 +28,7 @@ public class CMD_PostCheckLst implements CommandInterface {
     // TODO: verify All Exception
 
     @Override
-    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, org.json.simple.parser.ParseException, ParseException {
+    public Object process(Connection con, RequestParser par) throws SQLException, GenericException, org.json.simple.parser.ParseException, ParseException {
         String query = "INSERT INTO chklst (chkName, chkDesc, chkDueDate) VALUES (?, ?, ?)";
         PreparedStatement preparedStatement = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, par.getParams().get("name"));
@@ -39,11 +39,6 @@ public class CMD_PostCheckLst implements CommandInterface {
         int chkId = rs.next() ? rs.getInt(1) : 0;
         System.out.println("created post with id: "+ chkId);
         this.chkId = chkId;
-        return null;
-    }
-
-    @Override
-    public Object getData() {
         return null;
     }
 

@@ -24,7 +24,7 @@ public class CMD_GetCheckLstDetail implements CommandInterface {
     // TODO: verify All Exception
 
     @Override
-    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException {
+    public Object process(Connection con, RequestParser par) throws SQLException, GenericException {
         String query1 = "SELECT * FROM chklst WHERE chkId = ?";
         String query2 = "SELECT * FROM task WHERE tskChkId = ?";
 
@@ -47,10 +47,8 @@ public class CMD_GetCheckLstDetail implements CommandInterface {
         System.out.println(cl.toString());
 
         ps.close();
-        return new CommandWrapper(this);
+        return cl;
     }
-
-    public Object getData(){ return cl; }
 
     @Override
     public boolean validate(RequestParser par) throws GenericException {

@@ -10,8 +10,7 @@ import java.util.regex.Pattern;
 
 public interface CommandInterface {
     public Pattern getPattern();
-    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException;
-    public Object getData();
+    public Object process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException;
     public boolean validate(RequestParser par) throws GenericException, java.text.ParseException;
     public String toString();
 }

@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 
 // command sample: GET /checklists/open/sorted/duedate
 
-public class CMD_GETCheckLstOpenDueDate implements CommandInterface {
-    public static String pattern = "(GET /checklists/open/sorted/duedate)";
+public class CMD_GETCheckLstOpenNumTsks implements CommandInterface {
+    public static String pattern = "(GET /checklists/open/sorted/noftasks)";
     public LinkedList<CheckList> cls = new LinkedList<>();
 
     @Override
@@ -27,7 +27,12 @@ public class CMD_GETCheckLstOpenDueDate implements CommandInterface {
 
     @Override
     public Object process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
-        String query = "SELECT * FROM chklst WHERE chkIsCompleted = false ORDER BY chkDueDate";
+        String query = "SELECT * FROM\n" +
+                "  (SELECT * FROM chklst WHERE chkIsCompleted = FALSE) AS C\n" +
+                "    JOIN\n" +
+                "  (SELECT tskChkId, count(tskChkId) as NUMTSKS FROM task GROUP BY tskChkId ) AS T\n" +
+                "ON C.chkId = tskChkId\n" +
+                "ORDER BY NUMTSKS DESC;";
 
         PreparedStatement ps = con.prepareStatement(query);
         ResultSet rs = ps.executeQuery();
@@ -48,6 +53,6 @@ public class CMD_GETCheckLstOpenDueDate implements CommandInterface {
 
     @Override
     public String toString() {
-        return "GET /checklists/open/sorted/duedate - returns a list with all uncompleted checklists, ordered by increasing completion date";
+        return "GET /checklists/open/sorted/noftasks - returns a list with all uncompleted checklists, ordered by decreasing number of open tasks";
     }
 }

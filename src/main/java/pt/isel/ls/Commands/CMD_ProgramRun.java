@@ -20,7 +20,7 @@ public class CMD_ProgramRun implements CommandInterface {
     // TODO: verify All Exception && USE Transactions (setAutoCommit) !!!
 
     @Override
-    public CommandWrapper process(Connection con, RequestParser p) throws SQLException { // see if parsedcmd goes here
+    public Object process(Connection con, RequestParser p) throws SQLException { // see if parsedcmd goes here
         Scanner s = new Scanner(System.in);
         CommandMatcher commands = new CommandMatcher();
 
@@ -41,11 +41,6 @@ public class CMD_ProgramRun implements CommandInterface {
             }
 
         }
-    }
-
-    @Override
-    public Object getData() {
-        return null;
     }
 
     @Override

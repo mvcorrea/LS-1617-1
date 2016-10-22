@@ -24,7 +24,7 @@ public class CMD_PostChangeStatus implements CommandInterface{
     // TODO: verify All Exception
 
     @Override
-    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+    public Object process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
         String query1 = "SELECT * FROM chklst JOIN task ON chklst.chkId = task.tskChkId WHERE tskId = ?";
         String query2 = "UPDATE task SET tskIsCompleted = ? WHERE tskId = ?";
 
@@ -47,11 +47,6 @@ public class CMD_PostChangeStatus implements CommandInterface{
             System.out.println("updated Task with id: "+ tskId +" on checklist: "+ chkId);
         } else System.out.println("unable to find task: "+ tskId +" in checklist: "+chkId);
 
-        return null;
-    }
-
-    @Override
-    public Object getData() {
         return null;
     }
 

@@ -28,7 +28,7 @@ public class CMD_GetCheckLstClosed implements CommandInterface{
     // TODO: verify All Exception
 
     @Override
-    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+    public Object process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
         String query = "SELECT * FROM chklst WHERE chkIsCompleted = TRUE";
 
         PreparedStatement ps = con.prepareStatement(query);
@@ -40,11 +40,6 @@ public class CMD_GetCheckLstClosed implements CommandInterface{
 
         ps.close();
         return new CommandWrapper(this);
-    }
-
-    @Override
-    public Object getData() {
-        return cls;
     }
 
     @Override

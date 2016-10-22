@@ -21,16 +21,6 @@ public class CheckList {
 
     public CheckList(){}
 
-    // TODO: ASK if all checklist actualization could stay here?
-
-    public CheckList(int chkId, String chkName, String chkDesc, Timestamp chkDueDate, boolean chkIsCompleted) {
-        this.chkId = chkId;
-        this.chkName = chkName;
-        this.chkDesc = chkDesc;
-        this.chkDueDate = chkDueDate;
-        this.chkIsCompleted = chkIsCompleted;
-    }
-
     public CheckList fill(ResultSet rs) throws SQLException {
         this.chkId = rs.getInt("chkId");
         this.chkName = rs.getString("chkname");
@@ -41,53 +31,32 @@ public class CheckList {
     }
 
     public void addTask(ResultSet rs) throws SQLException {
-        tasks.add(new Task().add(rs));
-    }
-
-    public JSONArray lst2JsonArr() throws ParseException {
-        JSONArray arr = new JSONArray();
-        tasks.forEach(x -> {
-            JSONObject json = null;
-            try {
-                json = (JSONObject) new JSONParser().parse(x.toString());
-            } catch (ParseException e) {
-                e.printStackTrace();            // TODO: manage exceptions :)
-            }
-            arr.add(json);
-        });
-        return arr;
+        tasks.add(new Task().fill(rs));
     }
 
     public int numTasks(){ return tasks.size();}
 
-    @Override
-    public String toString() {
+    public JSONObject toJSON(){
         JSONObject obj = new JSONObject();
         obj.put("chkId", this.chkId);
         obj.put("chkName", this.chkName);
         obj.put("chkDesc", this.chkDesc);
         obj.put("chkDueDate", this.chkDueDate);
         obj.put("chkIsCompleted", this.chkIsCompleted);
-        if(tasks.size() != 0){ // only show tasks when in detail
-            try {
-                obj.put("chkTasks", lst2JsonArr());
-            } catch (ParseException e) {
-                e.printStackTrace();            // TODO: manage exceptions :)
-            }
+
+        if(tasks.size() > 1){  // only on detail show the tasks
+            JSONArray tskArr = new JSONArray();
+            tasks.forEach(x -> tskArr.add(x.toJSON()));
+            obj.put("temTasks", tskArr);
         }
-        return this.getClass().getSimpleName() +": "+ obj.toJSONString();
-        // check: http://jsonviewer.stack.hu/
+
+        return obj;
     }
 
-//    @Override
-//    public String toString() {
-//        return "CheckList: { " +
-//                "chkId = " + chkId +
-//                ", chkName = '" + chkName + '\'' +
-//                ", chkDesc = '" + chkDesc + '\'' +
-//                ", chkDueDate = " + chkDueDate +
-//                ", chkIsCompleted = " + chkIsCompleted +
-//                " }";
-//    }
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() +": "+this.toJSON().toJSONString();
+        // check: http://jsonviewer.stack.hu/
+    }
 
 }

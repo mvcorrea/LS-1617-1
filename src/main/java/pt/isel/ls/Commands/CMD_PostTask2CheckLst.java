@@ -24,7 +24,7 @@ public class CMD_PostTask2CheckLst implements CommandInterface {
     // TODO: verify All Exception && USE Transactions (setAutoCommit) !!!
 
     @Override
-    public CommandWrapper process(Connection con, RequestParser par) throws SQLException, ParseException {
+    public Object process(Connection con, RequestParser par) throws SQLException, ParseException {
 
         String query1 = "SELECT * FROM \n" +
                         "  (SELECT * FROM chklst WHERE chkId = ? ) AS X  \n" +
@@ -73,11 +73,6 @@ public class CMD_PostTask2CheckLst implements CommandInterface {
         } else System.out.println("unable to find checklist with id: "+chkId);
 
 
-        return null;
-    }
-
-    @Override
-    public Object getData() {
         return null;
     }
 

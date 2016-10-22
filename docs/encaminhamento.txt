@@ -32,3 +32,26 @@ este ira processar o pedido, instanciando o tipo da resposta e o populando com o
 
 
 
+
+
+-- comandos fase01
+
+GET /checklists
+GET /checklists/1
+GET /checklists/closed
+GET /checklists/open/sorted/duedate
+POST /checklists name=ck011&description=ck011desc&dueDate=20160101+1505                     ! returns unique identifier
+POST /checklists/12/tasks name=chk01.12&description=chk01.12desc&dueDate=20160102+1515      ! returns unique identifier
+POST /checklists/12/tasks/47 isClosed=true
+GET /checklists/open/sorted/noftasks
+GET /templates
+
+GET /templates/1
+POST /templates name=tmpl1&description=tmpl1desc                                            ! returns unique identifier
+POST /templates/1/tasks name=tsk02=description=tsk02desc
+POST /templates/2/create name=chk02&description=chk02desc&dueDate=20160102-1635
+
+
+
+
+

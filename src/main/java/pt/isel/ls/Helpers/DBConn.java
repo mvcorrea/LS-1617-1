@@ -18,7 +18,7 @@ public class DBConn {
         dataSource.setDatabaseName(System.getenv("LS_DB_NAME"));
     }
 
-    public static Connection getDataSource() throws SQLException {
+    public static Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }
 
