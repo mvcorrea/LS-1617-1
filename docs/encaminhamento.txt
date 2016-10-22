@@ -45,9 +45,9 @@ POST /checklists/12/tasks name=chk01.12&description=chk01.12desc&dueDate=2016010
 POST /checklists/12/tasks/47 isClosed=true
 GET /checklists/open/sorted/noftasks
 GET /templates
-
 GET /templates/1
 POST /templates name=tmpl1&description=tmpl1desc                                            ! returns unique identifier
+
 POST /templates/1/tasks name=tsk02=description=tsk02desc
 POST /templates/2/create name=chk02&description=chk02desc&dueDate=20160102-1635
 
