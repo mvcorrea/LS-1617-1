@@ -49,6 +49,6 @@ public class CMD_GetCheckLstClosed implements CommandInterface{
 
     @Override
     public String toString() {
-        return "GET /checklists/closed - returns a list with all completed checklists.";
+        return "GET /checklists/closed - returns a list with all completed checklists.\n";
     }
 }

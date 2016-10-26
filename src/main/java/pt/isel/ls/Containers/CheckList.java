@@ -34,14 +34,14 @@ public class CheckList {
         tasks.add(new Task().fill(rs));
     }
 
-    public int numTasks(){ return tasks.size();}
+    public int numTasks(){ return tasks.size(); }
 
     public JSONObject toJSON(){
         JSONObject obj = new JSONObject();
         obj.put("chkId", this.chkId);
         obj.put("chkName", this.chkName);
         obj.put("chkDesc", this.chkDesc);
-        obj.put("chkDueDate", this.chkDueDate);
+        if(this.chkDueDate != null) obj.put("chkDueDate", this.chkDueDate);
         obj.put("chkIsCompleted", this.chkIsCompleted);
 
         if(tasks.size() > 1){  // only on detail show the tasks

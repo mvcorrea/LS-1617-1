@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS sampleDB;
-CREATE DATABASE sampleDB;
-USE sampleDB;
+DROP DATABASE IF EXISTS dbTest;
+CREATE DATABASE dbTest;
+USE dbTest;
 
 CREATE TABLE templ (
   temId int not null AUTO_INCREMENT,
@@ -34,6 +34,9 @@ CREATE TABLE task (
 
 INSERT INTO chklst (chkName, chkDesc) VALUES ('clsample1', 'clsample1 desc');
 INSERT INTO chklst (chkName, chkDesc, chkDueDate) VALUES ('clsample2', 'clsample2 desc', '2000-01-01 00:01');
+INSERT INTO chklst (chkName, chkDesc) VALUES ('clsample3', 'clsample3 desc');
+INSERT INTO templ (temName, temDesc) VALUES ('tmsample1', 'tmsample1 desc');
+INSERT INTO templ (temName, temDesc) VALUES ('tmsample2', 'tmsample2 desc');
 
 SET @last = IFNULL(0, (SELECT MAX(tskOrder) FROM task WHERE tskChkId = 1)); -- SELECT @last;
 INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc) VALUES (1,(@last := @last + 1), 'tsk01.1', 'tsk01.1 desc');
@@ -42,3 +45,7 @@ INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc) VALUES (1,(@last := @las
 SET @last = IFNULL(0, (SELECT MAX(tskOrder) FROM task WHERE tskChkId = 1)); -- SELECT @last;
 INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc, tskDueDate) VALUES (2,(@last := @last + 1), 'tsk01.2', 'tsk01.2 desc', '2001-01-01 13:00');
 INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc, tskDueDate) VALUES (2,(@last := @last + 1), 'tsk02.2', 'tsk02.2 desc', '2001-01-01 10:00');
+
+SET @last = IFNULL(0, (SELECT MAX(tskOrder) FROM task WHERE tskChkId = 1)); -- SELECT @last;
+INSERT INTO task (tskTemId, tskOrder, tskName, tskDesc) VALUES (1,(@last := @last + 1), 'tsk01.3', 'tsk01.3 desc');
+INSERT INTO task (tskTemId, tskOrder, tskName, tskDesc) VALUES (1,(@last := @last + 1), 'tsk02.3', 'tsk02.3 desc');

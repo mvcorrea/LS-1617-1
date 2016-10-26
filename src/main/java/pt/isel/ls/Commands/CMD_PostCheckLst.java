@@ -30,15 +30,17 @@ public class CMD_PostCheckLst implements CommandInterface {
     @Override
     public Object process(Connection con, RequestParser par) throws SQLException, GenericException, org.json.simple.parser.ParseException, ParseException {
         String query = "INSERT INTO chklst (chkName, chkDesc, chkDueDate) VALUES (?, ?, ?)";
-        PreparedStatement preparedStatement = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, par.getParams().get("name"));
-        preparedStatement.setString(2, par.getParams().get("description"));
-        preparedStatement.setTimestamp(3, par.getParams().get("dueDate") != null ? str2ts(par.getParams().get("dueDate")) : null);
-        preparedStatement.execute();
-        ResultSet rs = preparedStatement.getGeneratedKeys();
-        int chkId = rs.next() ? rs.getInt(1) : 0;
-        System.out.println("created post with id: "+ chkId);
-        this.chkId = chkId;
+        PreparedStatement ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        ps.setString(1, par.getParams().get("name"));
+        ps.setString(2, par.getParams().get("description"));
+        ps.setTimestamp(3, par.getParams().get("dueDate") != null ? str2ts(par.getParams().get("dueDate")) : null);
+        ps.execute();
+        ResultSet rs = ps.getGeneratedKeys();
+        this.chkId = rs.next() ? rs.getInt(1) : 0;
+
+        System.out.println("created checklist with id: "+ chkId);
+
+        ps.close();
         return null;
     }
 

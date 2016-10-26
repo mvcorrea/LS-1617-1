@@ -43,7 +43,7 @@ public class CMD_GetCheckLstDetailTest extends TestHelper {
 
 //        if (!setUpIsDone) {
 //            // ONLY WORKS in *NIX Shells
-//            String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbsample.sql"};
+//            String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbTest.sql"};
 //            Process p = Runtime.getRuntime().exec(commd);
 //
 //            HashMap<String, String> env = new HashMap<>();

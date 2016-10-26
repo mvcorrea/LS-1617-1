@@ -48,6 +48,6 @@ public class CMD_GETCheckLstOpenDueDate implements CommandInterface {
 
     @Override
     public String toString() {
-        return "GET /checklists/open/sorted/duedate - returns a list with all uncompleted checklists, ordered by increasing completion date";
+        return "GET /checklists/open/sorted/duedate - returns a list with all uncompleted checklists, ordered by increasing completion date.\n";
     }
 }

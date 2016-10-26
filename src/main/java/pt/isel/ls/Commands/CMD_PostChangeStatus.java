@@ -57,6 +57,6 @@ public class CMD_PostChangeStatus implements CommandInterface{
 
     @Override
     public String toString() {
-        return "POST /checklists/{cid}/tasks/{lid} - changes the state of the task identified by lid, belonging to the checklist identified by cid\n";
+        return "POST /checklists/{cid}/tasks/{lid} - changes the state of the task identified by lid, belonging to the checklist identified by cid.\n";
     }
 }

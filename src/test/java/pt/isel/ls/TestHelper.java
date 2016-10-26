@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class TestHelper {
 
-    public static String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbsample.sql"};
+    public static String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbTest.sql"};
     public static Connection conn;
     public static Process proc;
 

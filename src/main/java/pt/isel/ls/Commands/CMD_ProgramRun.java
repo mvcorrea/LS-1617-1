@@ -50,6 +50,6 @@ public class CMD_ProgramRun implements CommandInterface {
 
     @Override
     public String toString() {
-        return "CMD_ProgramRun - Run program interactively";
+        return "\n";
     }
 }

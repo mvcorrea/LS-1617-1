@@ -3,13 +3,37 @@ apply plugin: 'idea'
 
 version = '1.0'
 
-
-
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
 }
 
-task printProps << {
-    println System.properties['system']
+tasks.withType(Exec){
+    def envVars = [:]
+    envVars['LS_DBCONN_TEST_PSQL'] = "server=127.0.0.1;" +
+            "database=dbTest;" +
+            "user=dbuser;" +
+            "password=dbuser"
+    environment << envVars
 }
+
+task setupDBTest(type:Exec, description: 'Setting up test database') {
+    workingDir 'docs/'
+    commandLine "sh", "-c", "mysql -u dbuser -pdbuser < dbTest.sql"
+}
+
+// far easier
+//tasks.withType(Exec){
+//    def envVars = [:]
+//    println "Setting up Enviroment Variables"
+//    envVars['SERVER'] = "127.0.0.1"
+//    envVars['DATABASE'] = "dbTest"
+//    envVars['USER'] = "dbuser"
+//    envVars['PASSWORD'] = "dbuser"
+//    environment << envVars
+//}
+
+test.dependsOn setupDBTest
+
+// could be used used like this
+// envVars['PATH'] = System.getenv("PATH")

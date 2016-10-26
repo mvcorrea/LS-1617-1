@@ -25,7 +25,7 @@ public class CMD_GetCheckLstTest extends TestHelper {
         if (!setUpIsDone) {
 
             // ONLY WORKS in *NIX Shells
-            String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbsample.sql"};
+            String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbTest.sql"};
             Process p = Runtime.getRuntime().exec(commd);
             HashMap<String, String> env  = new HashMap<>();
             env.put("LS_DB_HOST", "127.0.0.1");
