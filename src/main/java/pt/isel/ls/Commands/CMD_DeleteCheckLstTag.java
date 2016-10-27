@@ -7,6 +7,7 @@ import pt.isel.ls.Helpers.CommandInterface;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
@@ -24,7 +25,14 @@ public class CMD_DeleteCheckLstTag implements CommandInterface {
         this.gid = Integer.parseInt(par.getPath()[3]);
 
         try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, this.cid);
+            ps.setInt(2, this.gid);
+            ps.executeUpdate();
+            System.out.println("deleted associaation of group  ["+gid+"] from CheckList ["+cid+"]");
 
+        } catch (SQLException e){
+            throw new GenericException("SQL: "+ e.getMessage());
         }
 
         return null;

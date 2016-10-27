@@ -8,7 +8,6 @@ import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
@@ -21,13 +20,14 @@ public class CMD_PostChekLstTag implements CommandInterface{
 
     @Override
     public Object process(Connection con, RequestParser par) throws SQLException, GenericException {
-        String query = "INSERT INTO chklst (xtagId, xchkId) VALUES (?, ?)";
+        String query = "INSERT INTO chk2tag (xtagId, xchkId) VALUES (?, ?)";
         this.cid = Integer.parseInt(par.getPath()[1]);
+
 
         try {
             PreparedStatement ps = con.prepareStatement(query);
-            ps.setString(1, par.getParams().get("gid"));
-            ps.setString(1, this.cid);
+            ps.setInt(1, Integer.valueOf(par.getParams().get("gid")));
+            ps.setInt(2, this.cid);
             ps.execute();
         } catch (SQLException e){
             throw new GenericException("SQL: "+ e.getMessage());

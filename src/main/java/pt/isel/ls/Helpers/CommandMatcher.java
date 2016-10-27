@@ -43,7 +43,7 @@ public class CommandMatcher {
         addCommand(new CMD_GetTag());                   // GET /tags
         addCommand(new CMD_DeleteTag());                // DELETE /tags/{gid}
         addCommand(new CMD_PostChekLstTag());           // POST /checklists/{cid}/tags
-
+        addCommand(new CMD_DeleteCheckLstTag());        // DELETE /checklists/{cid}/tags/{gid}
 
     }
 
