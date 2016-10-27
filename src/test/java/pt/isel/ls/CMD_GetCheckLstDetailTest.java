@@ -22,40 +22,9 @@ import static org.junit.Assert.assertTrue;
 
 public class CMD_GetCheckLstDetailTest extends TestHelper {
 
-//    public static Connection conn;
-//    private static boolean setUpIsDone = false;
-
     @BeforeClass
     public static void setUp() throws Exception {
-        //TestHelper ts = new TestHelper();
-        HashMap<String, String> env = new HashMap<>();
-        env.put("LS_DB_HOST", "127.0.0.1");
-        env.put("LS_DB_USER", "dbuser");
-        env.put("LS_DB_PASS", "dbuser");
-        env.put("LS_DB_NAME", "sampleDB");
-        set(env);
-
-
-
-
-//        TestHelper ts = new TestHelper();
-//        ts.setEnv();
-
-//        if (!setUpIsDone) {
-//            // ONLY WORKS in *NIX Shells
-//            String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbTest.sql"};
-//            Process p = Runtime.getRuntime().exec(commd);
-//
-//            HashMap<String, String> env = new HashMap<>();
-//            env.put("LS_DB_HOST", "127.0.0.1");
-//            env.put("LS_DB_USER", "dbuser");
-//            env.put("LS_DB_PASS", "dbuser");
-//            env.put("LS_DB_NAME", "sampleDB");
-//            set(env);
-//
-//            conn = new DBConn().getConnection();
-//        }
-//        setUpIsDone = true;
+        setEnv(env);
     }
 
     @AfterClass

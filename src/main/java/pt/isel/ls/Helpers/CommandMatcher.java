@@ -39,6 +39,10 @@ public class CommandMatcher {
         // Phase 02
         addCommand(new CMD_ProgramExit());              // EXIT /
         addCommand(new CMD_ProgramOpts());              // OPTIONS /
+        addCommand(new CMD_PostTag());                  // POST /tags
+        addCommand(new CMD_GetTag());                   // GET /tags
+        addCommand(new CMD_DeleteTag());                // DELETE /tags/{gid}
+
     }
 
     // list of matched commands given an command line input

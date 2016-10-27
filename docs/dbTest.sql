@@ -32,11 +32,33 @@ CREATE TABLE task (
   primary key(tskId)
 );
 
+CREATE TABLE tag (
+  tagId int not null AUTO_INCREMENT,
+  tagName varchar(80) not null,
+  tagColor varchar(80) not null,
+  primary key(tagId)
+);
+
+CREATE TABLE chk2tag (
+  xtagId int not null,
+  xchkId int not null,
+  foreign key(xtagId) references tag(tagId),
+  foreign key(xchkId) references chklst(chkId),
+  primary key(xtagId, xchkId)
+);
+
+
+
 INSERT INTO chklst (chkName, chkDesc) VALUES ('clsample1', 'clsample1 desc');
 INSERT INTO chklst (chkName, chkDesc, chkDueDate) VALUES ('clsample2', 'clsample2 desc', '2000-01-01 00:01');
 INSERT INTO chklst (chkName, chkDesc) VALUES ('clsample3', 'clsample3 desc');
 INSERT INTO templ (temName, temDesc) VALUES ('tmsample1', 'tmsample1 desc');
 INSERT INTO templ (temName, temDesc) VALUES ('tmsample2', 'tmsample2 desc');
+INSERT INTO tag (tagName, tagColor) VALUES ('work', 'blue');
+INSERT INTO tag (tagName, tagColor) VALUES ('vacation', 'green');
+INSERT INTO chk2tag (xtagId, xchkId) VALUES (1,1);
+INSERT INTO chk2tag (xtagId, xchkId) VALUES (2,2);
+
 
 SET @last = IFNULL(0, (SELECT MAX(tskOrder) FROM task WHERE tskChkId = 1)); -- SELECT @last;
 INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc) VALUES (1,(@last := @last + 1), 'tsk01.1', 'tsk01.1 desc');
@@ -49,3 +71,5 @@ INSERT INTO task (tskChkId, tskOrder, tskName, tskDesc, tskDueDate) VALUES (2,(@
 SET @last = IFNULL(0, (SELECT MAX(tskOrder) FROM task WHERE tskChkId = 1)); -- SELECT @last;
 INSERT INTO task (tskTemId, tskOrder, tskName, tskDesc) VALUES (1,(@last := @last + 1), 'tsk01.3', 'tsk01.3 desc');
 INSERT INTO task (tskTemId, tskOrder, tskName, tskDesc) VALUES (1,(@last := @last + 1), 'tsk02.3', 'tsk02.3 desc');
+
+

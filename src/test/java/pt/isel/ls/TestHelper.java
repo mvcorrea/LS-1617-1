@@ -1,12 +1,9 @@
 package pt.isel.ls;
 
-
 import pt.isel.ls.Helpers.DBConn;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,18 +13,20 @@ import java.util.Map;
 
 public class TestHelper {
 
-    public static String[] commd = {"sh", "-c", "mysql -u dbuser -pdbuser < docs/dbTest.sql"};
     public static Connection conn;
-    public static Process proc;
+    public static final HashMap<String, String> env;
+
+    static {
+        env = new HashMap<>();
+        env.put("LS_DBCONN_TEST_PSQL","server=127.0.0.1;database=dbTest;user=dbuser;password=dbuser");
+    }
 
     public TestHelper() throws RuntimeException {
         try {
             this.conn = new DBConn().getConnection();
-            this.proc = Runtime.getRuntime().exec(commd);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-
     }
 
     public Timestamp str2ts(String datetime) throws ParseException {
@@ -37,7 +36,7 @@ public class TestHelper {
         return new java.sql.Timestamp(parsedDate.getTime());
     }
 
-    public static void set(Map<String, String> newenv) throws Exception {
+    public static void setEnv(Map<String, String> newenv) throws Exception {
         Class[] classes = Collections.class.getDeclaredClasses();
         Map<String, String> env = System.getenv();
         for(Class cl : classes) {
@@ -52,12 +51,4 @@ public class TestHelper {
         }
     }
 
-    public static void setEnv() throws Exception {
-        HashMap<String, String> env = new HashMap<>();
-        env.put("LS_DB_HOST", "127.0.0.1");
-        env.put("LS_DB_USER", "dbuser");
-        env.put("LS_DB_PASS", "dbuser");
-        env.put("LS_DB_NAME", "sampleDB");
-        set(env);
-    }
 }
