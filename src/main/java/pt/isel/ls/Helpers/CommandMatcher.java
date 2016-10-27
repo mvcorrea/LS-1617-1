@@ -42,6 +42,8 @@ public class CommandMatcher {
         addCommand(new CMD_PostTag());                  // POST /tags
         addCommand(new CMD_GetTag());                   // GET /tags
         addCommand(new CMD_DeleteTag());                // DELETE /tags/{gid}
+        addCommand(new CMD_PostChekLstTag());           // POST /checklists/{cid}/tags
+
 
     }
 

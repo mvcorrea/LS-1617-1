@@ -12,28 +12,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
-public class CMD_PostTag implements CommandInterface{
-    public static String pattern = "(POST /tags)";
-    public int tagId;
+public class CMD_PostChekLstTag implements CommandInterface{
+    public static String pattern = "(POST /checklists/\\d+/tags)";
+    public int cid;
 
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
     @Override
     public Object process(Connection con, RequestParser par) throws SQLException, GenericException {
-        String query = "INSERT INTO tag (tagName, tagColor) VALUES (?, ?)";
-        PreparedStatement ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-        ps.setString(1, par.getParams().get("name"));
-        ps.setString(2, par.getParams().get("color"));
+        String query = "INSERT INTO chklst (xtagId, xchkId) VALUES (?, ?)";
+        this.cid = Integer.parseInt(par.getPath()[1]);
 
-        ps.execute();
-        ResultSet rs = ps.getGeneratedKeys();
-        this.tagId = rs.next() ? rs.getInt(1) : 0;
-
-        System.out.println("created tag with id: "+ tagId);
-
-        ps.close();
-        return tagId;
+        try {
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setString(1, par.getParams().get("gid"));
+            ps.setString(1, this.cid);
+            ps.execute();
+        } catch (SQLException e){
+            throw new GenericException("SQL: "+ e.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -43,6 +42,6 @@ public class CMD_PostTag implements CommandInterface{
 
     @Override
     public String toString() {
-        return "POST /tags - creates a new tag and returns its identifier.\n";
+        return "POST /checklists/{cid}/tags - associate a tag to the cid.\n";
     }
 }

@@ -5,8 +5,6 @@ import org.junit.*;
 import pt.isel.ls.Commands.CMD_GetCheckLst;
 import pt.isel.ls.Containers.CheckList;
 import pt.isel.ls.Exceptions.GenericException;
-import pt.isel.ls.Helpers.CommandWrapper;
-import pt.isel.ls.Helpers.DBConn;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.*;

@@ -1,7 +1,5 @@
 package pt.isel.ls.Commands;
 
-import org.json.simple.parser.ParseException;
-import pt.isel.ls.Containers.CheckList;
 import pt.isel.ls.Containers.Tag;
 import pt.isel.ls.Exceptions.GenericException;
 import pt.isel.ls.Helpers.CommandInterface;
@@ -22,7 +20,7 @@ public class CMD_GetTag implements CommandInterface {
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
     @Override
-    public Object process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+    public Object process(Connection con, RequestParser par) throws SQLException, GenericException {
         String query = "SELECT * FROM tag";
         try {
             PreparedStatement ps = con.prepareStatement(query);

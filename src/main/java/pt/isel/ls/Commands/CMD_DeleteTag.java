@@ -18,7 +18,7 @@ public class CMD_DeleteTag implements CommandInterface {
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
     @Override
-    public Object process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+    public Object process(Connection con, RequestParser par) throws SQLException, GenericException{
         String query = "DELETE FROM tag WHERE tagid = ?";
         tagId = Integer.parseInt(par.getPath()[1]);
 
