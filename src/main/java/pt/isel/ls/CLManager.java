@@ -1,10 +1,10 @@
 package pt.isel.ls;
 import pt.isel.ls.Helpers.*;
 
-public class CLManager1 {
+public class CLManager {
 
     // command line call example (set env vars first)
-    // java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager1 GET /checklists
+    // java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager GET /checklists
     public static void main(String[] args) throws Exception {
 
         try {
