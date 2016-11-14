@@ -76,7 +76,7 @@ public class CMD_PostTask2Template implements CommandInterface {
     }
 
     @Override public String toString(){
-        return "POST /checklists/{cid}/tasks - creates a new task in the checklist 'cid'.\n";
+        return "POST /templates/{tid}/tasks - submits a new task for the format of the template tid.\n";
     }
 
     @Override

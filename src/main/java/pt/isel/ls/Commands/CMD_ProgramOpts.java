@@ -2,6 +2,7 @@ package pt.isel.ls.Commands;
 
 import pt.isel.ls.Helpers.CommandInterface;
 import pt.isel.ls.Helpers.CommandMatcher;
+import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
@@ -26,7 +27,7 @@ public class CMD_ProgramOpts implements CommandInterface {
         this.request = par;
         CommandMatcher commands = new CommandMatcher();
         commands.lstCommands();
-        return null;
+        return new CommandWrapper(this);
     }
 
     @Override
@@ -41,6 +42,6 @@ public class CMD_ProgramOpts implements CommandInterface {
 
     @Override
     public Object getData() {
-        return null;
+        return " ";
     }
 }

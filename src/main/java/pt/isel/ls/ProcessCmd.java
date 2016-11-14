@@ -20,9 +20,11 @@ public class ProcessCmd {
             OutputFormatter out = new OutputFormatter();
             System.out.println(out.format(rep));
         } else { // the remain commands returns an integer
-            CommandWrapper cw = (CommandWrapper) rep;
-            int id = (int) cw.getCmd().getData();
-            System.out.println("created/updated/deleted id: "+ id);
+            if(!par.getMethod().equals("OPTIONS")){ // avoid empty data
+                CommandWrapper cw = (CommandWrapper) rep;
+                int id = (int) cw.getCmd().getData();
+                System.out.println("created/updated/deleted id: "+ id);
+            }
         }
 
         conn.close();
