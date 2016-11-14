@@ -1,9 +1,7 @@
 package pt.isel.ls;
 
-import pt.isel.ls.Helpers.CommandMatcher;
-import pt.isel.ls.Helpers.CommandWrapper;
-import pt.isel.ls.Helpers.DBConn;
-import pt.isel.ls.Helpers.RequestParser;
+import pt.isel.ls.Containers.ContainerInterface;
+import pt.isel.ls.Helpers.*;
 
 import java.sql.Connection;
 
@@ -16,9 +14,18 @@ public class ProcessCmd {
 
         CommandWrapper cmd = commands.matchCommand(par.matchString());
         Connection conn = new DBConn().getConnection();
-        cmd.getCmd().process(conn, par);
-        conn.close();
+        Object rep = cmd.getCmd().process(conn, par);
 
+        if(par.getMethod().equals("GET")){  // only get outputs data
+            OutputFormatter out = new OutputFormatter();
+            System.out.println(out.format(rep));
+        } else { // the remain commands returns an integer
+            CommandWrapper cw = (CommandWrapper) rep;
+            int id = (int) cw.getCmd().getData();
+            System.out.println("created/updated/deleted id: "+ id);
+        }
+
+        conn.close();
     }
 }
 

@@ -1,17 +1,14 @@
 package pt.isel.ls.Containers;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
-public class Template {
+public class Template implements ContainerInterface {
     int temId;
     public String temName, temDesc;
-    LinkedList<Task> tasks = new LinkedList<>();
-    LinkedList<CheckList> ckecklists = new LinkedList<>();
+    public LinkedList<Task> tasks = new LinkedList<>();
+    public LinkedList<CheckList> checklists = new LinkedList<>();
 
     public Template() {}
 
@@ -27,32 +24,13 @@ public class Template {
     }
 
     public void addChecklist(ResultSet rs) throws SQLException {
-        ckecklists.add(new CheckList().fill(rs));
-    }
-
-    public JSONObject toJSON(){
-        JSONObject obj = new JSONObject();
-
-        obj.put("temId", this.temId);
-        obj.put("temName", this.temName);
-        obj.put("temDesc", this.temDesc);
-
-        // Tasks List
-        JSONArray tskArr = new JSONArray();
-        tasks.forEach(x -> tskArr.add(x.toJSON()));
-        obj.put("temTasks", tskArr);
-
-        // Checklists List
-        JSONArray chkArr = new JSONArray();
-        ckecklists.forEach(x -> chkArr.add(x.toJSON()));
-        obj.put("temChecklists", chkArr);
-
-        return obj;
+        checklists.add(new CheckList().fill(rs));
     }
 
     @Override
     public String toString(){
-        return this.getClass().getSimpleName() +": "+this.toJSON().toJSONString();
+        return this.getClass().getSimpleName();
+        //return this.getClass().getSimpleName() +": "+this.toJSON().toJSONString();
         // check: http://jsonviewer.stack.hu/
     }
 

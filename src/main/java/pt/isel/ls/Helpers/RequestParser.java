@@ -1,6 +1,7 @@
 package pt.isel.ls.Helpers;
 
-import pt.isel.ls.Exceptions.GenericException;
+import pt.isel.ls.Debug;
+import pt.isel.ls.Exceptions.AppException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class RequestParser {
     public String[] path = null;
     public HashMap<String,String> params = null;
     public HashMap<String,String> headers = null;
+    //headers.put("accept", "application/json");
 
     Pattern pattMethod = Pattern.compile("GET|POST|DELETE|OPTIONS|EXIT");
     Pattern parrHeadKeys = Pattern.compile("accept|file-name|accept-language");
@@ -21,19 +23,19 @@ public class RequestParser {
     Pattern pattParams = Pattern.compile(".*=+.*");
     Pattern pattHeaders = Pattern.compile(".*:+.*");
 
-    public RequestParser(String[] args) throws GenericException {
+    public RequestParser(String[] args) throws AppException {
         this.args = args;
         this.cmdLen = args.length;
         try {
 
             if(cmdLen > 1){ // MUST: Method + Path
                 if(!pattMethod.matcher(args[0]).matches())  // Parse the Method
-                    throw new GenericException("RequestParser: [" + args[0] + "] unknown method");
+                    throw new AppException("RequestParser: [" + args[0] + "] unknown method");
                 else
                     this.method = args[0];
 
                 if(!pattPath.matcher(args[1]).matches())    // Parse the Path
-                    throw new GenericException("RequestParser: [" + args[1] + "] path must start with /");
+                    throw new AppException("RequestParser: [" + args[1] + "] path must start with /");
                 else {
                     String[] pathParts = args[1].split("\\/");
                     //System.out.println(String.join("|", pathParts) + " len: "+ pathParts.length);
@@ -42,33 +44,36 @@ public class RequestParser {
                     else
                         this.path = new String[0];
                 }
+
+                headers = new HashMap<>();
+                headers.put("accept", "application/json"); // default header accept format < ----------------------------------------------
             }
             if(cmdLen > 2){  // have parameters or headers
 
                 if(cmdLen == 3){ // {method} {path} {parameters}
                     if(!(pattHeaders.matcher(args[2]).matches() || pattParams.matcher(args[2]).matches()))
-                        throw new GenericException("RequestParser: [" + args[2] + "] unable to match header/params");
+                        throw new AppException("RequestParser: [" + args[2] + "] unable to match header/params");
                     if(pattHeaders.matcher(args[2]).matches())
                         this.headers = parseHeaders(args[2]);
                     if(pattParams.matcher(args[2]).matches())
                         this.params  = parseParams(args[2]);
                 } else if(cmdLen == 4){ // {method} {path} {headers} {parameters}
                     if(!(pattHeaders.matcher(args[2]).matches() && pattParams.matcher(args[3]).matches()))
-                        throw new GenericException("RequestParser: [" + args[2] +" "+ args[3] + "] unable to match header/params");
+                        throw new AppException("RequestParser: [" + args[2] +" "+ args[3] + "] unable to match header/params");
                     if(pattHeaders.matcher(args[2]).matches())
                         this.headers = parseHeaders(args[2]);
                     if(pattParams.matcher(args[3]).matches())
                         this.params  = parseParams(args[3]);
-                } else throw new GenericException("RequestParser: [" + args[2] +" "+ args[3] +"] unable to parse header/params");
+                } else throw new AppException("RequestParser: [" + args[2] +" "+ args[3] +"] unable to parse header/params");
 
             }
         } catch (Exception e){
-            throw new GenericException("RequestParser: " + e.getMessage());
+            throw new AppException("RequestParser: " + e.getMessage());
         }
 
 
         // auto show the request object (for debugging)
-        System.out.println(toString());
+        if(Debug.ON) System.out.println(toString());
     }
 
     public String matchString(){    // just the method and path (to identify the command)
@@ -76,10 +81,10 @@ public class RequestParser {
         return args.length != 0 ? String.join(" ", Arrays.copyOfRange(this.args, 0, 2)) : "";
     }
 
-    public HashMap<String,String> parseParams(String parameters) throws GenericException {
+    public HashMap<String,String> parseParams(String parameters) throws AppException {
         HashMap<String,String> out = new HashMap<>();
         if(!parameters.matches(".*=+.*"))
-            throw new GenericException("RequestParser: ["+ parameters +"] unable to parse params");
+            throw new AppException("RequestParser: ["+ parameters +"] unable to parse params");
         Arrays.asList(parameters.split("&")).forEach(x -> {
             String[] tmp = x.split("=");
             out.put(tmp[0], tmp[1]);
@@ -87,10 +92,10 @@ public class RequestParser {
         return out;
     }
 
-    public HashMap<String,String> parseHeaders(String headers) throws GenericException { // optional component
+    public HashMap<String,String> parseHeaders(String headers) throws AppException { // optional component
         HashMap<String,String> out = new HashMap<>();
         if(!headers.matches(".*:+.*"))
-            throw new GenericException("RequestParser: ["+ headers +"] unable to parse headers");
+            throw new AppException("RequestParser: ["+ headers +"] unable to parse headers");
         Arrays.asList(headers.split("\\|")).forEach(x -> {
             String[] tmp = x.split(":");
             out.put(tmp[0], tmp[1]);

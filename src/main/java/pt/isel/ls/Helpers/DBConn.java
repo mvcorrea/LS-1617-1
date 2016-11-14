@@ -2,13 +2,14 @@ package pt.isel.ls.Helpers;
 
 // using MySQL here !
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
-import pt.isel.ls.Exceptions.GenericException;
+import pt.isel.ls.Debug;
+import pt.isel.ls.Exceptions.AppException;
+import pt.isel.ls.Exceptions.DBException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class DBConn {
@@ -26,27 +27,27 @@ public class DBConn {
         HashMap<String,String> env = null;
         try {
             env = parseEnv();
-        } catch (GenericException e) {
+        } catch (AppException e) {
             e.printStackTrace();
         }
-        System.out.println("connect to DB " + env);
+        if(Debug.ON) System.out.println("connect to DB " + env);
         dataSource.setServerName(env.get("server"));
         dataSource.setUser(env.get("user"));
         dataSource.setPassword(env.get("password"));
         dataSource.setDatabaseName(env.get("database"));
     }
 
-    private static HashMap<String,String> parseEnv() throws GenericException {
+    private static HashMap<String,String> parseEnv() throws AppException {
 
         String var = System.getenv("LS_DBCONN_TEST_PSQL");
-        if(var == null) throw new GenericException("database env parse error");
+        if(var == null) throw new AppException("database env parse error");
 
         return (HashMap) Arrays.stream(var.split(";")).map(elem -> elem.split("="))
                                                       .filter(elem -> elem.length == 2)
                                                       .collect(Collectors.toMap(e -> e[0], e -> e[1]));
     }
 
-    public static Connection getConnection() throws SQLException {
+    public static Connection getConnection() throws DBException, SQLException {
         return dataSource.getConnection();
     }
 

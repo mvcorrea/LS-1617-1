@@ -11,6 +11,10 @@ import java.util.regex.Pattern;
 
 public class CMD_ProgramOpts implements CommandInterface {
     public static String pattern = "(OPTIONS /)";
+    public RequestParser request;
+
+    @Override
+    public RequestParser getRequest() { return request; }
 
     @Override
     public Pattern getPattern() {
@@ -18,8 +22,8 @@ public class CMD_ProgramOpts implements CommandInterface {
     }
 
     @Override
-    public Object process(Connection con, RequestParser p) throws SQLException {
-
+    public Object process(Connection con, RequestParser par) throws SQLException {
+        this.request = par;
         CommandMatcher commands = new CommandMatcher();
         commands.lstCommands();
         return null;
@@ -33,5 +37,10 @@ public class CMD_ProgramOpts implements CommandInterface {
     @Override
     public String toString() {
         return "OPTIONS / - presents a list of available commands and their characteristics.\n";
+    }
+
+    @Override
+    public Object getData() {
+        return null;
     }
 }

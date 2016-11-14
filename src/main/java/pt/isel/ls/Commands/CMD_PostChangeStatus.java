@@ -1,7 +1,8 @@
 package pt.isel.ls.Commands;
 
 import org.json.simple.parser.ParseException;
-import pt.isel.ls.Exceptions.GenericException;
+import pt.isel.ls.Exceptions.AppException;
+import pt.isel.ls.Exceptions.DBException;
 import pt.isel.ls.Helpers.CommandInterface;
 import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
@@ -17,46 +18,70 @@ import java.util.regex.Pattern;
 
 public class CMD_PostChangeStatus implements CommandInterface{
     public static String pattern = "(POST /checklists/\\d+/tasks/\\d+)";
+    public RequestParser request;
+    int tskId;
+
+    @Override
+    public RequestParser getRequest() { return request; }
 
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
-    // TODO: verify All Exception
-
     @Override
-    public Object process(Connection con, RequestParser par) throws SQLException, GenericException, ParseException, java.text.ParseException {
+
+    public Object process(Connection con, RequestParser par) throws SQLException, AppException, ParseException, java.text.ParseException {
         String query1 = "SELECT * FROM chklst JOIN task ON chklst.chkId = task.tskChkId WHERE tskId = ?";
         String query2 = "UPDATE task SET tskIsCompleted = ? WHERE tskId = ?";
+        this.request = par;
 
         int chkId = Integer.parseInt(par.getPath()[1]);
         int tskId = Integer.parseInt(par.getPath()[3]);
 
-        PreparedStatement preparedStatement = con.prepareStatement(query1);
-        preparedStatement.setInt(1, tskId);
-        ResultSet rs = preparedStatement.executeQuery();
+        try {
 
-        if(rs.next()){
-            preparedStatement = con.prepareStatement(query2, PreparedStatement.RETURN_GENERATED_KEYS);
-            preparedStatement.setBoolean(1, Boolean.valueOf(par.getParams().get("isClosed")));
-            preparedStatement.setInt(2, tskId);
+            con.setAutoCommit(false);
 
-            preparedStatement.executeUpdate();
+            PreparedStatement ps1 = con.prepareStatement(query1);
+            ps1.setInt(1, tskId);
+            ResultSet rs1 = ps1.executeQuery();
 
-            ResultSet rs1 = preparedStatement.getGeneratedKeys();
-            //tskId = rs1.next() ? rs1.getInt(1) : 0; // NOT WORKING
-            System.out.println("updated Task with id: "+ tskId +" on checklist: "+ chkId);
-        } else System.out.println("unable to find task: "+ tskId +" in checklist: "+chkId);
+            if(rs1.next()){
 
-        return null;
+                PreparedStatement ps2 = con.prepareStatement(query2);
+                ps2.setBoolean(1, Boolean.valueOf(par.getParams().get("isClosed")));
+                ps2.setInt(2, tskId);
+
+                int count = ps2.executeUpdate();
+
+                if (count > 0) this.tskId = tskId;
+
+                //System.out.println("updated Task with id: "+ tskId +" on checklist: "+ chkId);
+
+                con.commit();
+
+                ps2.close();
+
+            } else throw new DBException("unable to find task: "+ tskId +" in checklist: "+chkId);
+
+            ps1.close();
+
+        } catch (SQLException e){ throw new DBException( e.getMessage() ); };
+
+        return new CommandWrapper(this);
     }
 
     @Override
-    public boolean validate(RequestParser par) throws GenericException {
+    public boolean validate(RequestParser par) throws AppException {
         return false;
     }
 
     @Override
     public String toString() {
         return "POST /checklists/{cid}/tasks/{lid} - changes the state of the task identified by lid, belonging to the checklist identified by cid.\n";
+    }
+
+    @Override
+    public Object getData() {
+        return this.tskId;
     }
 }

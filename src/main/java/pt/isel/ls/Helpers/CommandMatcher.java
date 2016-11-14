@@ -1,10 +1,10 @@
 package pt.isel.ls.Helpers;
 
 import pt.isel.ls.Commands.*;
-import pt.isel.ls.Exceptions.GenericException;
+import pt.isel.ls.Debug;
+import pt.isel.ls.Exceptions.AppException;
 
 import java.util.LinkedList;
-import java.util.StringJoiner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,8 +34,8 @@ public class CommandMatcher {
         addCommand(new CMD_GetTemplate());              // GET /templates
         addCommand(new CMD_GetTemplateDetail());        // GET /templates/{tid}
         addCommand(new CMD_GetCheckLstClosed());        // GET /checklists/closed
-        addCommand(new CMD_GETCheckLstOpenDueDate());   // GET /checklists/open/sorted/duedate
-        addCommand(new CMD_GETCheckLstOpenNumTsks());   // GET /checklists/open/sorted/noftasks
+        addCommand(new CMD_GetCheckLstOpenDueDate());   // GET /checklists/open/sorted/duedate
+        addCommand(new CMD_GetCheckLstOpenNumTsks());   // GET /checklists/open/sorted/noftasks
         // Phase 02
         addCommand(new CMD_ProgramExit());              // EXIT /
         addCommand(new CMD_ProgramOpts());              // OPTIONS /
@@ -48,24 +48,20 @@ public class CommandMatcher {
     }
 
     // list of matched commands given an command line input
-    public CommandWrapper matchCommand(String cmdIn) throws GenericException {
+    public CommandWrapper matchCommand(String cmdIn) throws AppException {
 
         LinkedList<CommandWrapper> out = new LinkedList<>();
 
         resources.stream().forEach( cmd -> {
-            //  Matcher m = cmd.getCmd().getPattern().matcher(cmdIn);
-            // if(m.matches()) out.fill(cmd);
-
             Pattern pat = cmd.getCmd().getPattern();
             if(pat == null) return;  // a new command returns null as default
             Matcher m = pat.matcher(cmdIn);
             if(m.matches()) out.add(cmd);
         });
 
-        //System.out.println(out.size());
-        out.stream().forEach(p -> System.out.println(p.getCmd().getPattern()));  // the resulting list
-        if(out.size() == 0) throw new GenericException("matchCommand: invalid command error");
-        if(out.size() != 1) throw new GenericException("matchCommand: ["+ cmdIn +"] command match error");
+        if(Debug.ON) out.stream().forEach(p -> System.out.println(p.getCmd().getPattern()));  // the resulting list
+        if(out.size() == 0) throw new AppException("matchCommand: invalid command error");
+        if(out.size() != 1) throw new AppException("matchCommand: ["+ cmdIn +"] command match error");
         return out.getFirst();
     }
 
@@ -74,7 +70,6 @@ public class CommandMatcher {
         resources.stream()
                  .sorted((x,y) -> x.getCmd().toString().compareToIgnoreCase(y.getCmd().toString()))
                  .forEach(p -> System.out.print(p.getCmd().toString()));
-        //.forEach(p -> System.out.println(p.getCmd().getPattern()));
     }
 
 

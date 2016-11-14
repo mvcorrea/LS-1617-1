@@ -5,7 +5,7 @@ import org.json.simple.JSONObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Tag {
+public class Tag implements ContainerInterface {
     public int tagId;
     public String tagName, tagColor;
 
@@ -17,19 +17,4 @@ public class Tag {
         this.tagColor = rs.getString("tagColor");
         return this;
     }
-
-    public JSONObject toJSON(){
-        JSONObject obj = new JSONObject();
-        obj.put("tagId", this.tagId);
-        obj.put("tagName", this.tagName);
-        obj.put("tagColor", this.tagColor);
-        return obj;
-    }
-
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() +": "+this.toJSON().toJSONString();
-        // check: http://jsonviewer.stack.hu/
-    }
-
 }

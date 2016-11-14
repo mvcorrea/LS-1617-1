@@ -15,3 +15,4 @@ LS_DB_HOST=127.0.0.1
 LS_DB_USER=dbuser
 LS_DB_PASS=dbuser
 LS_DB_NAME=clmanager
+LS_DBCONN_TEST_PSQL=server=127.0.0.1;database=dbTest;user=dbuser;password=dbuser

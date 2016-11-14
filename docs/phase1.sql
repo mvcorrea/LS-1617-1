@@ -69,4 +69,10 @@ SELECT * FROM templ JOIN task ON templ.temId = task.tskTemId;
 --- UPDATE tasks SET ordering = (@new_ordering := @new_ordering + @ordering_inc) ORDER BY ordering ASC
 
 
-
+-- CMD_GETCheckLstOpenNumTsks
+SELECT * FROM
+  (SELECT * FROM chklst WHERE chkIsCompleted = FALSE) AS C
+JOIN
+  (SELECT tskChkId, count(tskChkId) as NUMTSKS FROM task GROUP BY tskChkId ) AS T
+    ON C.chkId = tskChkId
+ORDER BY NUMTSKS DESC;

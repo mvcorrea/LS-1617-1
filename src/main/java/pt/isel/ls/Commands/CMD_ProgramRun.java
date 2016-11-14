@@ -10,7 +10,11 @@ import java.util.regex.Pattern;
 
 
 public class CMD_ProgramRun implements CommandInterface {
-    public static String pattern = "^$";
+    public static String pattern = "";
+    public RequestParser request;
+
+    @Override
+    public RequestParser getRequest() { return request; }
 
     @Override
     public Pattern getPattern() {
@@ -20,9 +24,10 @@ public class CMD_ProgramRun implements CommandInterface {
     // TODO: verify All Exception && USE Transactions (setAutoCommit) !!!
 
     @Override
-    public Object process(Connection con, RequestParser p) throws SQLException { // see if parsedcmd goes here
+    public Object process(Connection con, RequestParser par0) throws SQLException { // see if parsedcmd goes here
         Scanner s = new Scanner(System.in);
         CommandMatcher commands = new CommandMatcher();
+        this.request = par0;
 
         while(true){
             System.out.print("?> ");
@@ -33,9 +38,6 @@ public class CMD_ProgramRun implements CommandInterface {
             try {
                 RequestParser par = new RequestParser(args);
                 new ProcessCmd().doProcess(par);
-//                CommandWrapper cmd = commands.matchCommand(par.matchString());
-//                System.out.println(par.toString());
-//                System.out.println(cmd.getCmd().toString());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -51,5 +53,10 @@ public class CMD_ProgramRun implements CommandInterface {
     @Override
     public String toString() {
         return "\n";
+    }
+
+    @Override
+    public Object getData() {
+        return null;
     }
 }

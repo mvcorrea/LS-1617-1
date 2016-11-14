@@ -13,16 +13,19 @@ import java.util.regex.Pattern;
 
 public class CMD_ProgramExit implements CommandInterface {
     public static String pattern = "(EXIT /)";
+    public RequestParser request;
+
+    @Override
+    public RequestParser getRequest() { return request; }
 
     @Override
     public Pattern getPattern() {
         return Pattern.compile(pattern);
     }
 
-    // TODO: verify All Exception && USE Transactions (setAutoCommit) !!!
-
     @Override
-    public Object process(Connection con, RequestParser p) throws SQLException {
+    public Object process(Connection con, RequestParser par) throws SQLException {
+        this.request = par;
         System.exit(0);
         return null;
     }
@@ -35,5 +38,10 @@ public class CMD_ProgramExit implements CommandInterface {
     @Override
     public String toString() {
         return "EXIT / - ends the application.\n";
+    }
+
+    @Override
+    public Object getData() {
+        return null;
     }
 }

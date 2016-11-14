@@ -1,49 +1,48 @@
 package pt.isel.ls.Commands;
 
 import pt.isel.ls.Containers.Template;
-import pt.isel.ls.Exceptions.GenericException;
+import pt.isel.ls.Exceptions.AppException;
+import pt.isel.ls.Exceptions.DBException;
 import pt.isel.ls.Helpers.CommandInterface;
+import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 // command sample: GET /templates
 
 public class CMD_GetTemplateDetail implements CommandInterface {
     public static String pattern = "(GET /templates/\\d+)";
+    public RequestParser request;
     public Template tp = new Template();
+
+    @Override
+    public RequestParser getRequest() { return request; }
 
     @Override
     public Pattern getPattern() { return Pattern.compile(pattern); }
 
-
-    // TODO: verify All Exception
-
     @Override
-    public Object process(Connection con, RequestParser cmd) throws SQLException, GenericException {
+    public Object process(Connection con, RequestParser par) throws SQLException, AppException {
         // get the template
         String query1 = "SELECT * FROM templ WHERE temId = ?";
 
         // get template tasks
         String query2 = "SELECT * FROM\n" +
-                "  (SELECT * FROM task WHERE tskTemId = ? AND tskChkId IS NULL ) AS X\n" +
+                "  (SELECT * FROM task WHERE tskTemId = ? AND tskChkId IS NOT NULL) AS X\n" +
                 "  JOIN\n" +
                 "  (SELECT * FROM templ) AS Y\n" +
                 "    ON X.tskTemId = Y.temId;\n";
 
         // get checklists created from the template
-        String query3 = "SELECT * FROM\n" +
-                "(SELECT DISTINCT tskChkId FROM task WHERE tskTemId = ? AND tskChkId IS NOT NULL) AS X\n" +
-                "JOIN\n" +
-                "(SELECT * FROM chklst) AS Y\n" +
-                "ON X.tskChkId = Y.chkId;";
+        String query3 = "SELECT * FROM chklst WHERE chkTempl = ?";
 
-        int tid = Integer.parseInt(cmd.getPath()[1]);
+        this.request = par;
+        int tid = Integer.parseInt(par.getPath()[1]);
 
         try {
 
@@ -61,29 +60,35 @@ public class CMD_GetTemplateDetail implements CommandInterface {
 
             if(rs1.next()){
                 tp.fill(rs1);
-            } else throw new GenericException("checklist ["+ tid +"] not found");
+            } else throw new DBException("checklist ["+ tid +"] not found");
 
-            while(rs2.next()) tp.addTask(rs2);  // add tasks
+            while(rs2.next()) tp.addTask(rs2);  // add all tasks
             while(rs3.next()) tp.addChecklist(rs3); // add checklists
 
-            System.out.println(tp.toString());
+            //System.out.println(tp.toString());
 
             ps1.close();
             ps2.close();
             ps3.close();
-        } catch (SQLException e){
-            throw new GenericException("SQL: "+ e.getMessage());
-        }
-        return tp;
+
+
+        } catch (SQLException e){ throw new DBException( e.getMessage() ); };
+
+        return new CommandWrapper(this);
     }
 
     @Override
-    public boolean validate(RequestParser par) throws GenericException {
+    public boolean validate(RequestParser par) throws AppException {
         return false;
     }
 
     @Override
     public String toString(){
         return "GET /templates/{tid} - returns the details for the template tid, including its tasks and the checklists created from it\n";
+    }
+
+    @Override
+    public Object getData() {
+        return tp;
     }
 }
