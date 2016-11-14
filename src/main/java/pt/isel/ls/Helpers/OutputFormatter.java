@@ -17,10 +17,10 @@ public class OutputFormatter {
         container.put("CMD_GetCheckLstDetail",      new FormatterCheckList());
         container.put("CMD_GetCheckLst",            new FormatterCheckListCollection());
         container.put("CMD_GetCheckLstClosed",      new FormatterCheckListCollection());
-        container.put("CMD_GetCheckLstOpenDueDate_", new FormatterCheckListCollection());
+        container.put("CMD_GetCheckLstOpenDueDate", new FormatterCheckListCollection());
         container.put("CMD_GetTemplate",            new FormatterTemplateCollection());
         container.put("CMD_GetTemplateDetail",      new FormatterTemplate());
-        container.put("CMD_GetCheckLstOpenNumTsks_", new FormatterCheckListCollection());
+        container.put("CMD_GetCheckLstOpenNumTsks", new FormatterCheckListCollection());
 
         // phase 02
         container.put("CMD_GetTag",                 new FormatterTags());
