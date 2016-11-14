@@ -34,8 +34,8 @@ public class CommandMatcher {
         addCommand(new CMD_GetTemplate());              // GET /templates
         addCommand(new CMD_GetTemplateDetail());        // GET /templates/{tid}
         addCommand(new CMD_GetCheckLstClosed());        // GET /checklists/closed
-        addCommand(new CMD_GetCheckLstOpenDueDate());   // GET /checklists/open/sorted/duedate
-        addCommand(new CMD_GetCheckLstOpenNumTsks());   // GET /checklists/open/sorted/noftasks
+        addCommand(new CMD_GetCheckLstOpenDueDate_());   // GET /checklists/open/sorted/duedate
+        addCommand(new CMD_GetCheckLstOpenNumTsks_());   // GET /checklists/open/sorted/noftasks
         // Phase 02
         addCommand(new CMD_ProgramExit());              // EXIT /
         addCommand(new CMD_ProgramOpts());              // OPTIONS /

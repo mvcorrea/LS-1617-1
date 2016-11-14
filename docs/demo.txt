@@ -1,0 +1,33 @@
+
+0. load enviroment variable
+
+ source docs/env_vars.sh
+
+
+1) Clone the group repo to a new folder.
+
+mkdir demo && cd demo && git clone https://github.com/isel-leic-ls/1617-1-LI41N-G15.git && cd 1617-1-LI41N-G15
+
+2)
+
+git tag -l
+git checkout tags/0.2.0
+
+
+3) Use gradle to clean and build the project.
+
+./gradlew clean && ./gradlew build
+
+4) Use gradle to clean and build the project again.
+
+./gradlew clean && ./gradlew build
+
+5) Run OPTIONS command directly from the console
+
+java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager OPTIONS /
+
+6) Create a database named 'demo'.
+
+edit build.gradle and uncomment this line
+commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demo.sql"
+

@@ -20,6 +20,8 @@ tasks.withType(Exec){
 task setupDBTest(type:Exec, description: 'Setting up test database') {
     workingDir 'docs/'
     commandLine "sh", "-c", "mysql -u dbuser -pdbuser < dbTest.sql"
+    //commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demo.sql"
+
 }
 
 // far easier
