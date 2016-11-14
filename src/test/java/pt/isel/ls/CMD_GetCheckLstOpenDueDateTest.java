@@ -17,7 +17,7 @@ import java.util.LinkedList;
 import static org.junit.Assert.assertTrue;
 
 
-public class CMD_GetCheckLstOpenDueDateTest_ extends TestHelper{
+public class CMD_GetCheckLstOpenDueDateTest extends TestHelper{
     @BeforeClass
     public static void setUp() throws Exception {
         setEnv(env);
