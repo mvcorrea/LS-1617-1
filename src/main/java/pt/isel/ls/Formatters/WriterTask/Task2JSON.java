@@ -16,7 +16,7 @@ public class Task2JSON {
 
         tsk_prop.put("name", tsk.tskName);
         tsk_prop.put("isClosed", tsk.tskIsCompleted);
-        tsk_prop.put("isClosed", tsk.tskDueDate);
+        tsk_prop.put("dueDate", ""+tsk.tskDueDate+"");
         tsk_prop.put("description", tsk.tskDesc);
 
         obj.put("class", tsk_class);

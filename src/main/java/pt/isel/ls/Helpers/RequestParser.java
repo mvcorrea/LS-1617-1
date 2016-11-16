@@ -28,6 +28,9 @@ public class RequestParser {
         this.cmdLen = args.length;
         try {
 
+            headers = new HashMap<>();
+            headers.put("accept", "application/json"); // default header accept format < ----------------------------------------------
+
             if(cmdLen > 1){ // MUST: Method + Path
                 if(!pattMethod.matcher(args[0]).matches())  // Parse the Method
                     throw new AppException("RequestParser: [" + args[0] + "] unknown method");
@@ -45,8 +48,6 @@ public class RequestParser {
                         this.path = new String[0];
                 }
 
-                headers = new HashMap<>();
-                headers.put("accept", "application/json"); // default header accept format < ----------------------------------------------
             }
             if(cmdLen > 2){  // have parameters or headers
 
@@ -94,12 +95,16 @@ public class RequestParser {
 
     public HashMap<String,String> parseHeaders(String headers) throws AppException { // optional component
         HashMap<String,String> out = new HashMap<>();
+        out.put("accept", "application/json");
+
         if(!headers.matches(".*:+.*"))
             throw new AppException("RequestParser: ["+ headers +"] unable to parse headers");
         Arrays.asList(headers.split("\\|")).forEach(x -> {
             String[] tmp = x.split(":");
             out.put(tmp[0], tmp[1]);
         });
+
+        //if(out.get("accept") == null) out.put("accept", "application/json");
         return out;
     }
 

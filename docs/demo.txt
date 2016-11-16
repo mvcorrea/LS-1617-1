@@ -1,5 +1,5 @@
 
-0. load enviroment variable
+0) load enviroment variable
 
  source docs/env_vars.sh
 
@@ -28,6 +28,9 @@ java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager OPTIONS /
 
 6) Create a database named 'demo'.
 
+edit env_var.sh and change db then source it
+
 edit build.gradle and uncomment this line
 commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demo.sql"
 
+7)

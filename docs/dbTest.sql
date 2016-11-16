@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS dbTest;
-CREATE DATABASE dbTest;
-USE dbTest;
+DROP DATABASE IF EXISTS demo;
+CREATE DATABASE demo;
+USE demo;
 
 CREATE TABLE templ (
   temId int not null AUTO_INCREMENT,

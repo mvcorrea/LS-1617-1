@@ -17,7 +17,7 @@ tasks.withType(Exec){
     environment << envVars
 }
 
-task setupDBTest(type:Exec, description: 'Setting up test database') {
+task initDb(type:Exec, description: 'Setting up test database') {
     workingDir 'docs/'
     commandLine "sh", "-c", "mysql -u dbuser -pdbuser < dbTest.sql"
     //commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demo.sql"
@@ -35,7 +35,7 @@ task setupDBTest(type:Exec, description: 'Setting up test database') {
 //    environment << envVars
 //}
 
-test.dependsOn setupDBTest
+test.dependsOn initDb
 
 // could be used used like this
 // envVars['PATH'] = System.getenv("PATH")

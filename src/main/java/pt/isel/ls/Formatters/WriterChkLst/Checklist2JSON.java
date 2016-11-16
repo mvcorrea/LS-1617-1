@@ -21,7 +21,7 @@ public class Checklist2JSON {
 
         chk_prop.put("name", chk.chkName);
         chk_prop.put("isClosed", chk.chkIsCompleted);
-        chk_prop.put("dueDate", chk.chkDueDate);
+        chk_prop.put("dueDate", ""+chk.chkDueDate+"");
         chk_prop.put("description", chk.chkDesc);
 
         if(chk.tasks.size() > 0 ){  // detail (checklist with tasks)

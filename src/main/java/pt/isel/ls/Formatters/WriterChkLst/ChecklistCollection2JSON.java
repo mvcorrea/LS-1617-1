@@ -38,7 +38,7 @@ public class ChecklistCollection2JSON {
                 chk_classEl.add("checklist");
                 chk_propEl.put("name",x.chkName);
                 chk_propEl.put("isClosed",x.chkIsCompleted);
-                chk_propEl.put("dueDate",x.chkDueDate);
+                chk_propEl.put("dueDate",""+x.chkDueDate+"");
                 chk_propEl.put("description",x.chkDesc);
 
                 elem.put("class", chk_classEl);
