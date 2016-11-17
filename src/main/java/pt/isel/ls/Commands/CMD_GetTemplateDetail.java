@@ -1,6 +1,7 @@
 package pt.isel.ls.Commands;
 
 import pt.isel.ls.Containers.Template;
+import pt.isel.ls.Debug;
 import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Exceptions.DBException;
 import pt.isel.ls.Helpers.CommandInterface;
@@ -46,6 +47,8 @@ public class CMD_GetTemplateDetail implements CommandInterface {
 
         try {
 
+            con.setAutoCommit(false);
+
             PreparedStatement ps1 = con.prepareStatement(query1);
             ps1.setInt(1, tid);
             ResultSet rs1 = ps1.executeQuery();
@@ -58,14 +61,22 @@ public class CMD_GetTemplateDetail implements CommandInterface {
             ps3.setInt(1, tid);
             ResultSet rs3 = ps3.executeQuery();
 
+
+
             if(rs1.next()){
                 tp.fill(rs1);
             } else throw new DBException("template ["+ tid +"] not found");
 
             while(rs2.next()) tp.addTask(rs2);  // add all tasks
-            while(rs3.next()) tp.addChecklist(rs3); // add checklists
+
+            int count =0;
+            while(rs3.next()){ tp.addChecklist(rs3); count++; } // add checklists
+
+            if(Debug.ON) System.out.println("templ checklists #: "+ count);
 
             //System.out.println(tp.toString());
+
+            con.commit();
 
             ps1.close();
             ps2.close();

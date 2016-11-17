@@ -4,6 +4,7 @@ package pt.isel.ls.Formatters.WriterTempl;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pt.isel.ls.Containers.Template;
+import pt.isel.ls.Debug;
 import pt.isel.ls.Formatters.WriterTask.Task2JSON;
 
 public class Template2JSON {
@@ -29,6 +30,8 @@ public class Template2JSON {
                 tmp_entit.add(new Task2JSON().toJSON(x));
             });
         }
+
+        if(Debug.ON) System.out.println("templ checklists: "+ tp.checklists.size());
 
         if(tp.checklists.size() > 0){  // put an array with checklists id's
             JSONArray tmp_chelists = new JSONArray();
