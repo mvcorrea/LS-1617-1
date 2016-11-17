@@ -33,6 +33,16 @@ public class Checklist2JSON {
             });
         }
 
+        if(chk.tags.size() > 0){
+            JSONArray chk_tags = new JSONArray();
+            chk.tags.forEach(x -> {
+                chk_tags.add(x.tagName);
+            });
+            chk_prop.put("tags", chk_tags);
+        }
+
+
+
         obj.put("class", chk_class);
         obj.put("properties", chk_prop);
 

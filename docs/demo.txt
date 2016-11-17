@@ -1,36 +1,158 @@
 
-0) load enviroment variable
+0) load enviroment variable db start
 
  source docs/env_vars.sh
+ mysql.server start
 
 
 1) Clone the group repo to a new folder.
 
 mkdir demo && cd demo && git clone https://github.com/isel-leic-ls/1617-1-LI41N-G15.git && cd 1617-1-LI41N-G15
 
-2)
+
+2) Checkout the phase 2 tag (0.2.* tag).
 
 git tag -l
-git checkout tags/0.2.0
+git checkout tags/0.2.1
 
 
 3) Use gradle to clean and build the project.
 
 ./gradlew clean && ./gradlew build
 
+
 4) Use gradle to clean and build the project again.
 
 ./gradlew clean && ./gradlew build
+
 
 5) Run OPTIONS command directly from the console
 
 java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager OPTIONS /
 
+
 6) Create a database named 'demo'.
 
-edit env_var.sh and change db then source it
+vi docs/env_var.sh and change db then source it
 
 edit build.gradle and uncomment this line
 commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demo.sql"
 
-7)
+
+7) Change the environment variable to use this new database.
+
+edit & source doc/env_var.sh  (did on previous step)
+
+
+8) Use gradle to run the initDb task in order to initialize this database.
+
+./gradlew initDB
+
+
+9) List checklists directly from the console. Ensure the application ends after showing an empty list.
+
+ java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager GET /checklists
+
+
+10) Start the application without any parameters and execute the following commands from inside the application.
+
+ java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager
+
+
+11) Create two checklists, the second with due date.
+
+ POST /checklist name=check1&description=desk1
+ POST /checklist name=check2&description=desk2&dueDate=20161117+2300
+
+12) Show that the created checklists are stored inside the demo database.
+
+ use demo
+ select * from chklst;
+
+13) List checklists
+
+ GET /checklists
+
+14) Add two tasks to the first checklist
+
+ POST /checklists/1/tasks name=task1&description=desc1
+ POST /checklists/1/tasks name=task2&description=desc2
+
+15) Try to add a task to the second checklist with a due date greater than the due date of the checklist  (!!!! I am not verifying that checklist due date must be greater than oldest task)
+
+ POST /checklists/2/tasks name=task1&description=desc1&dueDate=20171117+2300
+
+16) Add a task to the second checklist with due date lower than the due date of the checklist
+
+ POST /checklists/2/tasks name=task1&description=desc1&dueDate=20151117+2300
+
+17) Close the task
+
+ POST /checklists/2/tasks/1 isClosed=true
+
+18) List all checklists, for each one of the following formats:
+
+ GET /checklists accept:text/plain
+ GET /checklists accept:text/html
+ GET /checklists accept:application/json
+
+
+19) Create a template
+
+ POST /templates name=tmpl1&description=tmpl1
+
+20) Add two tasks to the template
+
+ POST /templates/1/tasks name=ttask1&description=ttask1
+ POST /templates/1/tasks name=ttask2&description=ttask2
+
+21) List templates in application/json
+
+ GET /templates accept:application/json
+
+22) Show the detailed information about the template in application/json
+
+ GET /templates/1 accept:application/json
+
+23) Create a checklist with the tasks of the template
+
+ POST /templates/1/create name=fromtmpl1&description=fromtmpl1
+
+24) List checklists in application/json
+
+ GET /checklists accept:application/json
+
+25) Create a checklist with one task
+
+ POST /checklist name=check3&description=desk3
+ POST /checklist/3/task name=task1check3&description=task1check3
+
+26) List all uncompleted checklists, ordered by decreasing number of open tasks
+
+ GET /checklists/open/sorted/noftasks
+
+27) Create tags named school and urgent.
+
+ POST /tags name=school&color=blue
+ POST /tags name=urgent&color=red
+
+
+28) Associate the school tag to all checklist
+
+ POST /checklists/1/tags gid=1
+ POST /checklists/2/tags gid=1
+ POST /checklists/3/tags gid=1
+
+29) Associate the urgent tag to one checklist
+
+ POST /checklists/1/tags gid=2
+
+30) Show the detailed information about the checklist with tag urgent, using application/json.
+
+ GET /checklists/1 accept:application/json
+
+31) Exit the application.
+
+ EXIT /
+
+

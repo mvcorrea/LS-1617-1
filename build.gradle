@@ -8,20 +8,19 @@ dependencies {
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
 }
 
-tasks.withType(Exec){
-    def envVars = [:]
-    envVars['LS_DBCONN_TEST_PSQL'] = "server=127.0.0.1;" +
-            "database=dbTest;" +
-            "user=dbuser;" +
-            "password=dbuser"
-    environment << envVars
-}
+//tasks.withType(Exec){
+//    def envVars = [:]
+//    envVars['LS_DBCONN_TEST_PSQL'] = "server=127.0.0.1;" +
+//            "database=dbTest;" +
+//            "user=dbuser;" +
+//            "password=dbuser"
+//    environment << envVars
+//}
 
 task initDb(type:Exec, description: 'Setting up test database') {
     workingDir 'docs/'
     commandLine "sh", "-c", "mysql -u dbuser -pdbuser < dbTest.sql"
-    //commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demo.sql"
-
+    //commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demoDB.sql"
 }
 
 // far easier

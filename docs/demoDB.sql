@@ -15,7 +15,7 @@ CREATE TABLE chklst (
   chkName varchar(80) not null,
   chkDesc varchar(200) not null,
   chkDueDate TIMESTAMP NULL,
-  chkIsCompleted BOOLEAN not null DEFAULT 1,
+  chkIsCompleted BOOLEAN not null DEFAULT 0,
   foreign key(chkTempl) references templ(temId),
   primary key(chkId)
 );

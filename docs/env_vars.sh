@@ -6,7 +6,9 @@ echo "> setting ENV vars"
 #export LS_DB_USER="dbuser"
 #export LS_DB_PASS="dbuser"
 #export LS_DB_NAME="clmanager"
+
 export LS_DBCONN_TEST_PSQL="server=127.0.0.1;database=dbTest;user=dbuser;password=dbuser"
+#export LS_DBCONN_TEST_PSQL="server=127.0.0.1;database=demo;user=dbuser;password=dbuser"
 
 #printenv | grep LS_DB
 

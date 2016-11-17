@@ -31,11 +31,21 @@ public class CMD_GetCheckLstDetail implements CommandInterface {
     public Object process(Connection con, RequestParser par) throws SQLException, AppException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         String query1 = "SELECT * FROM chklst WHERE chkId = ?";
         String query2 = "SELECT * FROM task WHERE tskChkId = ?";
+        // associate tags with the checklist
+        String query3 = "SELECT * FROM\n" +
+                "  (SELECT * FROM chk2tag WHERE chk2tag.xchkId = ?) as X\n" +
+                "JOIN\n" +
+                "  (SELECT * FROM tag) AS Y\n" +
+                " ON X.xtagId = Y.tagId";
+
         this.request = par;
 
         int cid = Integer.parseInt(par.getPath()[1]);
 
         try {
+
+            con.setAutoCommit(false);
+
             PreparedStatement ps = con.prepareStatement(query1);
             ps.setInt(1, cid);
             ResultSet rs1 = ps.executeQuery();
@@ -49,7 +59,15 @@ public class CMD_GetCheckLstDetail implements CommandInterface {
             ps.setInt(1, cid);
             ResultSet rs2 = ps.executeQuery();
 
+            ps = con.prepareStatement(query3);
+            ps.setInt(1, cid);
+            ResultSet rs3 = ps.executeQuery();
+
             while(rs2.next()) cl.addTask(rs2);
+
+            while(rs3.next()) cl.addTag(rs3);
+
+            con.commit();
 
             ps.close();
         } catch (SQLException e){ throw new DBException( e.getMessage() ); };

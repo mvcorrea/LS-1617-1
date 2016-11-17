@@ -13,6 +13,7 @@ public class CheckList implements ContainerInterface {
     public Timestamp chkDueDate;
     public boolean chkIsCompleted;
     public LinkedList<Task> tasks = new LinkedList<>();
+    public LinkedList<Tag> tags = new LinkedList<>();
     public RequestParser req;
 
     public CheckList() { }
@@ -32,6 +33,12 @@ public class CheckList implements ContainerInterface {
     public void addTask(ResultSet rs) throws SQLException {
         tasks.add(new Task().fill(rs));
     }
+
+    // fill tags list
+    public void addTag(ResultSet rs) throws SQLException {
+        tags.add(new Tag().fill(rs));
+    }
+
 
     @Override
     public String toString() {

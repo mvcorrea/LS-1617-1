@@ -5,13 +5,16 @@ import pt.isel.ls.Debug;
 import pt.isel.ls.Formatters.WriterTask.Task2TEXT;
 
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 
 public class Checklist2TEXT {
 
     public String toTEXT(CheckList chk) {
 
-        String out = chk.chkName +" - "+ chk.chkIsCompleted +" - "+ chk.chkDueDate +" - "+ chk.chkDesc +"\n";
+        String tags = chk.tags.stream().map(x -> x.tagName).collect(Collectors.joining(", "));
+
+        String out = chk.chkName +" - "+ chk.chkIsCompleted +" - "+ chk.chkDueDate +" - "+ chk.chkDesc +" - ["+ tags +"]\n";
 
         StringJoiner joiner = new StringJoiner("\n");
 

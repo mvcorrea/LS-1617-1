@@ -8,6 +8,7 @@ import pt.isel.ls.Formatters.WebFormatter.WebDocument;
 import pt.isel.ls.Formatters.WriterTask.Task2HTML;
 
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 public class Checklist2HTML {
 
@@ -15,7 +16,9 @@ public class Checklist2HTML {
         WebDocument doc = new WebDocument();
         doc.setTitle("checklist");
 
-        doc.addElem(new WebTag("p").setData(chk.chkName +" - "+ chk.chkIsCompleted+" - "+ chk.chkDueDate +" - "+ chk.chkDesc));
+        String tags = chk.tags.stream().map(x -> x.tagName).collect(Collectors.joining(", "));
+
+        doc.addElem(new WebTag("p").setData(chk.chkName +" - "+ chk.chkIsCompleted+" - "+ chk.chkDueDate +" - "+ chk.chkDesc +" - [" + tags + "]"));
         WebTag list = new WebTag("ul");
 
         chk.tasks.forEach(x -> {
