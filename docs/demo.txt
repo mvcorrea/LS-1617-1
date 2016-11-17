@@ -33,11 +33,9 @@ java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager OPTIONS /
 
 6) Create a database named 'demo'.
 
-vi docs/env_var.sh and change db then source it
-
-edit build.gradle and uncomment this line
-commandLine "sh", "-c", "mysql -u dbuser -pdbuser < demo.sql"
-
+vi docs/env_vars.sh  ----> and change db then source it
+vi build.gradle      ----> and change to the right db
+source docs/env_vars.sh
 
 7) Change the environment variable to use this new database.
 
@@ -61,8 +59,8 @@ edit & source doc/env_var.sh  (did on previous step)
 
 11) Create two checklists, the second with due date.
 
- POST /checklist name=check1&description=desk1
- POST /checklist name=check2&description=desk2&dueDate=20161117+2300
+ POST /checklists name=check1&description=desk1
+ POST /checklists name=check2&description=desk2&dueDate=20161117+2300
 
 12) Show that the created checklists are stored inside the demo database.
 
@@ -110,7 +108,7 @@ edit & source doc/env_var.sh  (did on previous step)
 
  GET /templates accept:application/json
 
-22) Show the detailed information about the template in application/json
+22) Show the detailed information about the template in application/json    ( CHECK )
 
  GET /templates/1 accept:application/json
 
@@ -124,8 +122,8 @@ edit & source doc/env_var.sh  (did on previous step)
 
 25) Create a checklist with one task
 
- POST /checklist name=check3&description=desk3
- POST /checklist/3/task name=task1check3&description=task1check3
+ POST /checklists name=check3&description=desk4
+ POST /checklists/4/tasks name=task1check3&description=task1check4
 
 26) List all uncompleted checklists, ordered by decreasing number of open tasks
 

@@ -33,7 +33,7 @@ public class CMD_GetTemplateDetail implements CommandInterface {
 
         // get template tasks
         String query2 = "SELECT * FROM\n" +
-                "  (SELECT * FROM task WHERE tskTemId = ? AND tskChkId IS NOT NULL) AS X\n" +
+                "  (SELECT * FROM task WHERE tskTemId = ?) AS X\n" +
                 "  JOIN\n" +
                 "  (SELECT * FROM templ) AS Y\n" +
                 "    ON X.tskTemId = Y.temId;\n";
@@ -60,7 +60,7 @@ public class CMD_GetTemplateDetail implements CommandInterface {
 
             if(rs1.next()){
                 tp.fill(rs1);
-            } else throw new DBException("checklist ["+ tid +"] not found");
+            } else throw new DBException("template ["+ tid +"] not found");
 
             while(rs2.next()) tp.addTask(rs2);  // add all tasks
             while(rs3.next()) tp.addChecklist(rs3); // add checklists
