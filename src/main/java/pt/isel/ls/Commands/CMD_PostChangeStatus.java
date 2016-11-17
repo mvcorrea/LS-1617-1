@@ -30,8 +30,11 @@ public class CMD_PostChangeStatus implements CommandInterface{
     @Override
 
     public Object process(Connection con, RequestParser par) throws SQLException, AppException, ParseException, java.text.ParseException {
-        String query1 = "SELECT * FROM chklst JOIN task ON chklst.chkId = task.tskChkId WHERE tskId = ?";
-        String query2 = "UPDATE task SET tskIsCompleted = ? WHERE tskId = ?";
+        // checklist with tasks
+        //String query1 = "SELECT * FROM chklst JOIN task ON chklst.chkId = task.tskChkId WHERE chkId = ? AND tskId = ?";
+        String query1 = "SELECT * FROM task WHERE tskChkId = ? AND tskId = ?";
+
+        String query2 = "UPDATE task SET tskIsCompleted = ? WHERE tskId = ? AND tskChkId = ?";
         this.request = par;
 
         int chkId = Integer.parseInt(par.getPath()[1]);
@@ -42,7 +45,8 @@ public class CMD_PostChangeStatus implements CommandInterface{
             con.setAutoCommit(false);
 
             PreparedStatement ps1 = con.prepareStatement(query1);
-            ps1.setInt(1, tskId);
+            ps1.setInt(1, chkId);
+            ps1.setInt(2, tskId);
             ResultSet rs1 = ps1.executeQuery();
 
             if(rs1.next()){
@@ -50,6 +54,7 @@ public class CMD_PostChangeStatus implements CommandInterface{
                 PreparedStatement ps2 = con.prepareStatement(query2);
                 ps2.setBoolean(1, Boolean.valueOf(par.getParams().get("isClosed")));
                 ps2.setInt(2, tskId);
+                ps2.setInt(3, chkId);
 
                 int count = ps2.executeUpdate();
 

@@ -82,11 +82,11 @@ edit & source doc/env_var.sh  (did on previous step)
 
 16) Add a task to the second checklist with due date lower than the due date of the checklist
 
- POST /checklists/2/tasks name=task1&description=desc1&dueDate=20151117+2300
+ #POST /checklists/2/tasks name=task1&description=desc1&dueDate=20151117+2300
 
-17) Close the task
+17) Close the task  ( CHECK )
 
- POST /checklists/2/tasks/1 isClosed=true
+ POST /checklists/2/tasks/3 isClosed=true
 
 18) List all checklists, for each one of the following formats:
 
