@@ -31,9 +31,10 @@ public class CMD_GetTemplate implements CommandInterface {
     public Object process(Connection con, RequestParser par) throws SQLException, AppException {
         String query = "SELECT * FROM templ";
         this.request = par;
+        PreparedStatement ps = con.prepareStatement(query);
+
 
         try {
-            PreparedStatement ps = con.prepareStatement(query);
 
             ResultSet rs = ps.executeQuery();
 
@@ -41,9 +42,11 @@ public class CMD_GetTemplate implements CommandInterface {
 
             //tps.forEach(System.out::println);
 
+        } catch (SQLException e){
+            throw new DBException( e.getMessage() );
+        } finally {
             ps.close();
-
-        } catch (SQLException e){ throw new DBException( e.getMessage() ); };
+        };
 
 
     return new CommandWrapper(this);

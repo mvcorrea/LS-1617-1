@@ -1,5 +1,6 @@
 package pt.isel.ls.Helpers;
 
+import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Formatters.*;
 import pt.isel.ls.Debug;
 
@@ -28,7 +29,7 @@ public class OutputFormatter {
 
     }
 
-    public String format(Object obj) throws IOException {
+    public String format(Object obj) throws IOException, AppException {
         this.cmd = (CommandWrapper) obj;
         if(Debug.ON) System.out.println("> OutputFormatter: "+ cmd.getCmd().getClass().getSimpleName());
         String cont = cmd.getCmd().getClass().getSimpleName();

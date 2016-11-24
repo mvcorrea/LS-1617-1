@@ -35,23 +35,33 @@ public class CMD_PostChangeStatus implements CommandInterface{
         String query1 = "SELECT * FROM task WHERE tskChkId = ? AND tskId = ?";
 
         String query2 = "UPDATE task SET tskIsCompleted = ? WHERE tskId = ? AND tskChkId = ?";
+
+        String query3 = "SELECT BIT_AND(tskIsCompleted) FROM\n" +
+                "(SELECT * FROM chklst WHERE chkId = ?) AS C LEFT JOIN task ON C.chkId = tskChkId";
+        String query4 = "UPDATE chklst SET chkIsCompleted = ? WHERE chkId = ?";
+
+
+
         this.request = par;
 
         int chkId = Integer.parseInt(par.getPath()[1]);
         int tskId = Integer.parseInt(par.getPath()[3]);
 
+        PreparedStatement ps1 = con.prepareStatement(query1);
+        PreparedStatement ps2 = con.prepareStatement(query2);
+        PreparedStatement ps3 = con.prepareStatement(query3);
+        PreparedStatement ps4 = con.prepareStatement(query4);
+
         try {
 
             con.setAutoCommit(false);
 
-            PreparedStatement ps1 = con.prepareStatement(query1);
             ps1.setInt(1, chkId);
             ps1.setInt(2, tskId);
             ResultSet rs1 = ps1.executeQuery();
 
             if(rs1.next()){
 
-                PreparedStatement ps2 = con.prepareStatement(query2);
                 ps2.setBoolean(1, Boolean.valueOf(par.getParams().get("isClosed")));
                 ps2.setInt(2, tskId);
                 ps2.setInt(3, chkId);
@@ -62,15 +72,30 @@ public class CMD_PostChangeStatus implements CommandInterface{
 
                 //System.out.println("updated Task with id: "+ tskId +" on checklist: "+ chkId);
 
-                con.commit();
-
-                ps2.close();
-
             } else throw new DBException("unable to find task: "+ tskId +" in checklist: "+chkId);
 
-            ps1.close();
 
-        } catch (SQLException e){ throw new DBException( e.getMessage() ); };
+            ps3.setInt(1, chkId);
+            ResultSet rs3 = ps3.executeQuery();
+            rs3.next();
+            boolean allTskClosed = rs3.getBoolean(1);
+            //System.out.println("-> "+allTskClosed);
+
+            // update checklist completed
+            if(allTskClosed) ps4.setBoolean(1, true);
+            else ps4.setBoolean(1, false);
+            ps4.setInt(2, chkId);
+            int chkUpd = ps4.executeUpdate();
+            //System.out.println("--> " + chkUpd);
+
+        } catch (SQLException e){
+            con.rollback();
+            throw new DBException( e.getMessage() );
+        }finally {
+            con.commit();
+            ps1.close();
+            ps2.close();
+        };
 
         return new CommandWrapper(this);
     }

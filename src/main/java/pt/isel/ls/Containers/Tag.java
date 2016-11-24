@@ -17,4 +17,8 @@ public class Tag implements ContainerInterface {
         this.tagColor = rs.getString("tagColor");
         return this;
     }
+
+    public Tag getTag(){
+        return this;
+    }
 }

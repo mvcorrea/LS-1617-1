@@ -52,9 +52,14 @@ public class CMD_PostTask2CheckLst extends CMD_Generic implements CommandInterfa
             ResultSet rs1 = ps1.executeQuery();
 
             if(rs1.next()){
+
                 this.chkIsCompleted = rs1.getBoolean("chkIsCompleted");
                 this.chkDueDate = rs1.getTimestamp("chkDueDate");
                 this.tskDueDate = par.getParams().containsKey("dueDate") ? str2ts(par.getParams().get("dueDate")) : null;
+
+                if(!verifyDueDate(this.chkDueDate, this.tskDueDate)) // TODO:put inside validade!
+                    throw new AppException("unable to create task, chlst duedate must be greater than task duedate");
+
 
                 if(!validate(par)){
                     String query3 = "UPDATE chklst SET chkDueDate = ?, chkIsCompleted = ? WHERE chkId = ?";
@@ -93,6 +98,12 @@ public class CMD_PostTask2CheckLst extends CMD_Generic implements CommandInterfa
         return new CommandWrapper(this);
     }
 
+    public boolean verifyDueDate(Timestamp ttc, Timestamp ttt){
+        if(ttt == null) return true;
+        if(ttc.getTime() - ttt.getTime() > 0) return true;
+        return false;
+    }
+
     @Override
     public boolean validate(RequestParser par) throws ParseException {
         // must actualize checklist (chkIsCompleted -> false) after insertion
@@ -101,10 +112,10 @@ public class CMD_PostTask2CheckLst extends CMD_Generic implements CommandInterfa
             return false;
         }
         // must update the checklist with the elder dueDate (from task)
-        if(this.chkDueDate != null || this.tskDueDate != null ){
-            if(this.chkDueDate == null || this.chkDueDate.getTime() < this.tskDueDate.getTime()) this.chkDueDate = this.tskDueDate;
-            return false;
-        }
+//        if(this.chkDueDate != null || this.tskDueDate != null ){
+//            if(this.chkDueDate == null || this.chkDueDate.getTime() < this.tskDueDate.getTime()) this.chkDueDate = this.tskDueDate;
+//            return false;
+//        }
         return true;
     }
 

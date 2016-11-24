@@ -40,13 +40,14 @@ public class CMD_GetCheckLstDetail implements CommandInterface {
 
         this.request = par;
 
+        PreparedStatement ps = con.prepareStatement(query1);
+
         int cid = Integer.parseInt(par.getPath()[1]);
 
         try {
 
             con.setAutoCommit(false);
 
-            PreparedStatement ps = con.prepareStatement(query1);
             ps.setInt(1, cid);
             ResultSet rs1 = ps.executeQuery();
 
@@ -67,10 +68,16 @@ public class CMD_GetCheckLstDetail implements CommandInterface {
 
             while(rs3.next()) cl.addTag(rs3);
 
-            con.commit();
 
+
+
+        } catch (SQLException e){
+            con.rollback();
+            throw new DBException( e.getMessage() );
+        }finally {
+            con.commit();
             ps.close();
-        } catch (SQLException e){ throw new DBException( e.getMessage() ); };
+        };
 
         return new CommandWrapper(this);
     }

@@ -10,6 +10,7 @@ public class WebTag implements WebInterface {
     String tagName, data;
     HashMap<String,String> attr = new HashMap<>();
     LinkedList<WebElem> contents = new LinkedList<>();
+    boolean newline = false;
 
     // a webcontent could be a tag or a string
     // only a webtag permits add content in it
@@ -59,9 +60,15 @@ public class WebTag implements WebInterface {
         return joiner.toString();
     }
 
+    public WebTag nl(){
+        newline = true;
+        return this;
+    }
+
     @Override
     public String toString() {
-        return "<"+tagName+genAttrStr() +">"+
-               genDataStr() + "</"+tagName+">";
+        String nl = newline ? "\n" : "";
+        return nl+ "<"+tagName+genAttrStr() +">"+
+               genDataStr() + "</"+tagName+">"+ nl;
     }
 }

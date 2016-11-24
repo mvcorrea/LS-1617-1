@@ -26,21 +26,39 @@ public class CMD_GetCheckLst implements CommandInterface {
 
     @Override
     public Object process(Connection con, RequestParser par) throws SQLException, AppException {
-        String query = "SELECT * FROM chklst";
+        String query1 = "SELECT * FROM chklst";
+        String query2 = "SELECT * FROM (SELECT * FROM chk2tag WHERE xchkId = ?) AS X JOIN tag ON tagId = X.xtagId";
+
         this.request = par;
 
+        PreparedStatement ps1 = con.prepareStatement(query1);
+        PreparedStatement ps2 = con.prepareStatement(query2);
+
         try {
-            PreparedStatement ps = con.prepareStatement(query);
+            con.setAutoCommit(false);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs1 = ps1.executeQuery();
 
-            while(rs.next()) cls.add(new CheckList().fill(rs));
+            while(rs1.next()){
+                CheckList chk = new CheckList();
+                chk.fill(rs1);  // fill ckecklist
+
+                ps2.setInt(1, rs1.getInt("chkId"));  // put chklst id on qry2
+                ResultSet rs2 = ps2.executeQuery();
+                while(rs2.next()){
+                    chk.addTag(rs2);   // fill tags
+                }
+                cls.add(chk);
+            }
 
             //System.out.println(cmd.getHeaders().get("accept"));     // <--- OutputFormatter
 
-            ps.close();
         } catch (SQLException e){
+            con.rollback();
             throw new AppException("SQL: "+ e.getMessage());
+        } finally {
+            con.commit();
+            ps1.close();
         }
         return new CommandWrapper(this);
     }

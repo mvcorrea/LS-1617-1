@@ -2,6 +2,7 @@ package pt.isel.ls.Formatters;
 
 
 import pt.isel.ls.Containers.Template;
+import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Formatters.WriterTempl.TemplateCollection2HTML;
 import pt.isel.ls.Formatters.WriterTempl.TemplateCollection2JSON;
 import pt.isel.ls.Formatters.WriterTempl.TemplateCollection2TEXT;
@@ -30,8 +31,9 @@ public class FormatterTemplateCollection implements FormatterInterface{
     }
 
     @Override
-    public String format() {
+    public String format() throws AppException{
         String accType = obj.getCmd().getRequest().getHeaders().get("accept");
+        if(accept.get(accType) == null) throw new AppException("unable to find file-type: "+ accType);
         return accept.get(accType);
     }
 }

@@ -125,8 +125,13 @@ INSERT INTO templ (temName, temDesc) VALUES ('parques', 'parques LX #4 templ');
 INSERT INTO chklst (chkName, chkDesc, chkDueDate, chkIsCompleted) VALUES ('museusLX2', 'museus checklist #3', '2017-01-01 13:21', FALSE );
 INSERT INTO chklst (chkName, chkDesc, chkDueDate, chkIsCompleted) VALUES ('restaurantesPT1', 'restaurantes porto #1', '2002-01-01 14:51', FALSE );
 -- tags
-INSERT INTO tag (tagName, tagColor) VALUES ('work', 'blue');
+INSERT INTO tag (tagName, tagColor) VALUES ('work', 'red');
 INSERT INTO tag (tagName, tagColor) VALUES ('vacation', 'green');
-INSERT INTO chk2tag (xtagId, xchkId) VALUES (1,1);
-INSERT INTO chk2tag (xtagId, xchkId) VALUES (2,2);
-
+INSERT INTO tag (tagName, tagColor) VALUES ('amusement', 'yellow');
+INSERT INTO tag (tagName, tagColor) VALUES ('cultural', 'blue');
+INSERT INTO tag (tagName, tagColor) VALUES ('food', 'pink');
+INSERT INTO chk2tag (xtagId, xchkId) VALUES (2,1);
+INSERT INTO chk2tag (xtagId, xchkId) VALUES (3,2);
+INSERT INTO chk2tag (xtagId, xchkId) VALUES (4,2);
+INSERT INTO chk2tag (xtagId, xchkId) VALUES (5,6);
+INSERT INTO chk2tag (xtagId, xchkId) VALUES (5,7);
