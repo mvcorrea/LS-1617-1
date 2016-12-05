@@ -44,6 +44,8 @@ public class CommandMatcher {
         addCommand(new CMD_DeleteTag());                // DELETE /tags/{gid}
         addCommand(new CMD_PostChekLstTag());           // POST /checklists/{cid}/tags
         addCommand(new CMD_DeleteCheckLstTag());        // DELETE /checklists/{cid}/tags/{gid}
+        // TESTE
+        addCommand(new CMD_TESTE());                    // POST /templates/{tid}⁄checklists/notclosed/tags
         // Phase 03
         addCommand(new CMD_ServerListen());             // LISTEN /
 
