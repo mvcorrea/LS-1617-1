@@ -1,6 +1,5 @@
 package pt.isel.ls;
 
-import pt.isel.ls.Containers.ContainerInterface;
 import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Helpers.*;
 
@@ -10,9 +9,10 @@ import java.sql.Connection;
 public class ProcessCmd {
 
     private CommandMatcher commands = new CommandMatcher();
+    public String outData;
 
     // inputs:  the request object with fields parsed
-    public void doProcess(RequestParser par) throws Exception {
+    public ProcessCmd doProcess(RequestParser par) throws Exception {
 
         CommandWrapper cmd = commands.matchCommand(par.matchString());
         Connection conn = new DBConn().getConnection();
@@ -20,7 +20,7 @@ public class ProcessCmd {
 
         if(par.getMethod().equals("GET")){  // only get outputs data
             OutputFormatter out = new OutputFormatter();
-            String outData = out.format(rep);
+            this.outData = out.format(rep);
             String filename = par.getHeaders().get("file-name");
 
             if(filename == null){       // check if data need to be printed to file
@@ -41,6 +41,7 @@ public class ProcessCmd {
         }
 
         conn.close();
+        return this;
     }
 
     private void toFile(String filename, String output) throws IOException, AppException {

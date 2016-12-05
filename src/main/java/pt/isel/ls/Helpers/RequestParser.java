@@ -16,7 +16,7 @@ public class RequestParser {
     public HashMap<String,String> headers = null;
     //headers.put("accept", "application/json");
 
-    Pattern pattMethod = Pattern.compile("GET|POST|DELETE|OPTIONS|EXIT");
+    Pattern pattMethod = Pattern.compile("GET|POST|DELETE|OPTIONS|EXIT|LISTEN");
     Pattern parrHeadKeys = Pattern.compile("accept|file-name|accept-language");
     Pattern parrHeadAccept = Pattern.compile("text\\/plain|text\\/html|application\\/json");
     Pattern pattPath   = Pattern.compile("^/.*");

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public interface CommandInterface {
     public Pattern getPattern();
-    public Object process(Connection con, RequestParser par) throws SQLException, AppException, ParseException, java.text.ParseException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, DBException;
+    public Object process(Connection con, RequestParser par) throws Exception;
     public boolean validate(RequestParser par) throws AppException, java.text.ParseException;
     public String toString();
     public Object getData();
