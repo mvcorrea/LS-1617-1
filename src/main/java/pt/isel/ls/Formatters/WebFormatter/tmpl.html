@@ -13,9 +13,27 @@
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        if(history.length < 3) document.location.href="/";
+    </script>
+
     <title>%title%</title>
 </head>
 <body>
-%body%
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">MyAPP</a>
+            <ul class="nav navbar-nav">
+                <li><a href="/checklists">Checklists</a></li>
+                <li><a href="/templates">Templates</a></li>
+                <li><a href="/tags">Tags</a></li>
+            </ul>
+            %menu%
+        </div>
+    </nav>
+    %body%
+</div>
+
 </body>
 </html>

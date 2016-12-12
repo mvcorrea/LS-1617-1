@@ -5,8 +5,6 @@ import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Helpers.CommandMatcher;
-import pt.isel.ls.Helpers.CommandWrapper;
-import pt.isel.ls.Helpers.DBConn;
 import pt.isel.ls.Helpers.RequestParser;
 import pt.isel.ls.ProcessCmd;
 
@@ -14,13 +12,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -54,6 +50,8 @@ public class WebParser extends HttpServlet {
             ProcessCmd cmd  = new ProcessCmd().doProcess(par);
             byte[] respBodyBytes = cmd.outData.getBytes(utf8);
 
+            // TODO: treat error codes
+
             resp.setStatus(200);
             resp.setContentLength(respBodyBytes.length);
             resp.setContentType(par.getHeaders().get("accept"));
@@ -64,13 +62,17 @@ public class WebParser extends HttpServlet {
             os.close();
 
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("URISyntaxException: "+ e.getMessage());
+            //e.printStackTrace();
         } catch (AppException e) {
-            e.printStackTrace();
+            logger.error("AppException: "+ e.getMessage());
+            //e.printStackTrace();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("SQLException: "+ e.getMessage());
+            //e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Exception: "+ e.getMessage());
+            //e.printStackTrace();
         }
 
     }

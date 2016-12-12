@@ -14,6 +14,12 @@ public class Tag2HTML {
         WebDocument doc = new WebDocument();
         doc.setTitle("Tags");
 
+        // menu
+        WebTag menu = new WebTag("ul").setAttr("class", "nav navbar-nav navbar-right");
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","javascript:history.go(-1)").setData("Back")));
+        doc.setMenu(menu);
+
+
         WebTag main = new WebTag("div").setAttr("class", "container");
 
         WebTag tableT = new WebTag("table").setAttr("class", "table table-striped").nl();
@@ -26,7 +32,10 @@ public class Tag2HTML {
         tgs.forEach(tag -> {
             // String tags = chk.tags.stream().map(x -> x.tagName).collect(Collectors.joining(", "));
             WebTag row = new WebTag("tr").nl();
-            row.addContent(new WebTag("td").setData(tag.tagName));
+
+            // dead end
+            row.addContent(new WebTag("td").addContent(new WebTag("a").setAttr("href","tags/"+tag.tagId).setData(tag.tagName)));
+            //row.addContent(new WebTag("td").setData(tag.tagName));
             row.addContent(new WebTag("td").setData(tag.tagColor));
             tbodyT.addContent(row);
         });

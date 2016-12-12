@@ -24,6 +24,16 @@ public class ChecklistCollection2HTML {
         WebDocument doc = new WebDocument();
         doc.setTitle("checklists");
 
+        // menu
+        WebTag menu = new WebTag("ul").setAttr("class", "nav navbar-nav navbar-right");
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","/checklists/closed").setData("Closed")));
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","/checklists/open/sorted/duedate").setData("Open/DueDate")));
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","/checklists/open/sorted/noftasks").setData("Open/NumTasks")));
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","javascript:history.go(-1)").setData("Back")));
+        doc.setMenu(menu);
+
+
+        // main body
         WebTag main = new WebTag("div").setAttr("class", "container");
 
         WebTag table = new WebTag("table").setAttr("class", "table table-striped").nl();
@@ -40,7 +50,8 @@ public class ChecklistCollection2HTML {
         cls.forEach(chk -> {
             String tags = chk.tags.stream().map(x -> x.tagName).collect(Collectors.joining(", "));
             WebTag row = new WebTag("tr").nl();
-            row.addContent(new WebTag("td").setData(chk.chkName));
+            row.addContent(new WebTag("td").addContent(new WebTag("a").setAttr("href","/checklists/"+chk.chkId).setData(chk.chkName)));
+            //row.addContent(new WebTag("td").setData(chk.chkName));
             row.addContent(new WebTag("td").setData(chk.chkDesc));
             row.addContent(new WebTag("td").setData(getDueDate(chk.chkDueDate)));
             row.addContent(new WebTag("td").setData(chk.chkIsCompleted?"True":"False"));

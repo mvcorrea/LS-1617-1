@@ -23,6 +23,12 @@ public class Template2HTML {
         WebDocument doc = new WebDocument();
         doc.setTitle("template");
 
+        // menu
+        WebTag menu = new WebTag("ul").setAttr("class", "nav navbar-nav navbar-right");
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","javascript:history.go(-1)").setData("Back")));
+        doc.setMenu(menu);
+
+
         // TEMPLATE
         WebTag tableT = new WebTag("table").setAttr("class", "table table-striped").nl();
         WebTag theadT =  new WebTag("thead").nl();
@@ -86,7 +92,8 @@ public class Template2HTML {
         tmpl.checklists.forEach(chk -> {
            // String tags = chk.tags.stream().map(x -> x.tagName).collect(Collectors.joining(", "));
             WebTag row = new WebTag("tr").nl();
-            row.addContent(new WebTag("td").setData(chk.chkName));
+            row.addContent(new WebTag("td").addContent(new WebTag("a").setAttr("href","/checklists/"+chk.chkId).setData(chk.chkName)));
+            //row.addContent(new WebTag("td").setData(chk.chkName));
             row.addContent(new WebTag("td").setData(chk.chkDesc));
             row.addContent(new WebTag("td").setData(getDueDate(chk.chkDueDate)));
             row.addContent(new WebTag("td").setData(chk.chkIsCompleted?"True":"False"));

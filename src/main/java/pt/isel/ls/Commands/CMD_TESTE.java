@@ -14,6 +14,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
+/*
+
+description:
+comando que dado o parametro git (template id), associa a tag gid a todas as
+checklists nao fechadas e criadas a partir da template tid
+
+POST /templates/2/checklists/notclosed/tags gid=17
+
+*/
+
+
 
 public class CMD_TESTE extends CMD_Generic implements CommandInterface {
 

@@ -1,23 +1,16 @@
 package pt.isel.ls.Commands;
 
-import org.json.simple.parser.ParseException;
 import pt.isel.ls.Exceptions.AppException;
-import pt.isel.ls.Exceptions.DBException;
 import pt.isel.ls.Helpers.CommandInterface;
 import pt.isel.ls.Helpers.CommandWrapper;
 import pt.isel.ls.Helpers.RequestParser;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
 import pt.isel.ls.Helpers.WebServer.WebParser;
 import pt.isel.ls.Helpers.WebServer.WebServer;
 

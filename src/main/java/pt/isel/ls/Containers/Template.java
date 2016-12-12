@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 
 public class Template implements ContainerInterface {
-    int temId;
+    public int temId;
     public String temName, temDesc;
     public LinkedList<Task> tasks = new LinkedList<>();
     public LinkedList<CheckList> checklists = new LinkedList<>();

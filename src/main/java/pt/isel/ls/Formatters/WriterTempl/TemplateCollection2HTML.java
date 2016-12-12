@@ -16,6 +16,13 @@ public class TemplateCollection2HTML {
         WebDocument doc = new WebDocument();
         doc.setTitle("templates");
 
+
+        // menu
+        WebTag menu = new WebTag("ul").setAttr("class", "nav navbar-nav navbar-right");
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","javascript:history.go(-1)").setData("Back")));
+        doc.setMenu(menu);
+
+
         WebTag main = new WebTag("div").setAttr("class", "container");
 
         WebTag table = new WebTag("table").setAttr("class", "container table table-striped").nl();
@@ -30,7 +37,8 @@ public class TemplateCollection2HTML {
         WebTag tbody = new WebTag("tbody").nl();
         tps.forEach(tpl -> {
             WebTag row = new WebTag("tr").nl();
-            row.addContent(new WebTag("td").setData(tpl.temName));
+            row.addContent(new WebTag("td").addContent(new WebTag("a").setAttr("href","templates/"+tpl.temId).setData(tpl.temName)));
+            //row.addContent(new WebTag("td").setData(tpl.temName));
             row.addContent(new WebTag("td").setData(tpl.temDesc));
             tbody.addContent(row);
         });

@@ -2,6 +2,7 @@ package pt.isel.ls.Formatters.WriterChkLst;
 
 
 import pt.isel.ls.Containers.CheckList;
+import pt.isel.ls.Containers.Tag;
 import pt.isel.ls.Debug;
 import pt.isel.ls.Formatters.WebFormatter.WebTag;
 import pt.isel.ls.Formatters.WebFormatter.WebDocument;
@@ -10,6 +11,7 @@ import pt.isel.ls.Formatters.WriterTask.Task2HTML;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 public class Checklist2HTML {
@@ -19,9 +21,28 @@ public class Checklist2HTML {
         else return "-";
     }
 
+    public String tagWithLink(LinkedList<Tag> tgs){
+        LinkedList<String> tags = new LinkedList<>();
+
+        tgs.forEach(x -> {
+            WebTag tagElem = new WebTag("a").setAttr("href", "/tags/"+x.tagId).setData(x.tagName);
+            tags.add(tagElem.toString());
+        });
+
+        return tags.stream().collect(Collectors.joining(", "));
+    }
+
+
     public String toHTML(CheckList chk) throws IOException {
         WebDocument doc = new WebDocument();
         doc.setTitle("checklist");
+
+        // menu
+        WebTag menu = new WebTag("ul").setAttr("class", "nav navbar-nav navbar-right");
+        menu.addContent(new WebTag("li").addContent(new WebTag("a").setAttr("href","javascript:history.go(-1)").setData("Back")));
+        doc.setMenu(menu);
+
+
 
         // CHECKLIST
         WebTag tableC = new WebTag("table").setAttr("class", "table table-striped").nl();
@@ -34,13 +55,17 @@ public class Checklist2HTML {
         tableC.addContent(theadC);
 
         WebTag tbodyC = new WebTag("tbody").nl();
-        String tagsC = chk.tags.stream().map(x -> x.tagName).collect(Collectors.joining(", "));
+
+        // tags to html
+        //String tagsC = chk.tags.stream().map(x -> x.tagName).collect(Collectors.joining(", "));
+
         WebTag rowC = new WebTag("tr").nl();
         rowC.addContent(new WebTag("td").setData(chk.chkName));
         rowC.addContent(new WebTag("td").setData(chk.chkDesc));
         rowC.addContent(new WebTag("td").setData(getDueDate(chk.chkDueDate)));
         rowC.addContent(new WebTag("td").setData(chk.chkIsCompleted?"True":"False"));
-        rowC.addContent(new WebTag("td").setData(tagsC));
+        //rowC.addContent(new WebTag("td").setData(tagsC));
+        rowC.addContent(new WebTag("td").setData(tagWithLink(chk.tags)));
         tbodyC.addContent(rowC);
         tableC.addContent(tbodyC);
 

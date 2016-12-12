@@ -31,6 +31,17 @@ public class WebDocument {
         return this;
     }
 
+    public WebDocument setMenu(WebTag menu){
+        this.document = this.document.replace("%menu%", menu.toString());
+        return this;
+    }
+
+    public WebDocument setMenu(String menu){
+
+
+        return this;
+    }
+
     public WebDocument addElem(Object data){
         body.add(new WebElem((WebInterface) data));
         return this;
