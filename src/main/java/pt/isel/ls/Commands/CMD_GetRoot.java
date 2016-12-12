@@ -24,9 +24,6 @@ public class CMD_GetRoot extends CMD_Generic implements CommandInterface {
         if(par.getHeaders().containsKey("accept") && par.getHeaders().get("accept").equals("text/html}")){
 
         }
-
-
-
         return new CommandWrapper(this);
     }
 
@@ -42,6 +39,12 @@ public class CMD_GetRoot extends CMD_Generic implements CommandInterface {
 
     @Override
     public RequestParser getRequest() {
-        return "GET Root";
+        return null;
     }
+
+    @Override
+    public String toString() {
+        return "CMD_GetRoot";
+    }
+
 }
