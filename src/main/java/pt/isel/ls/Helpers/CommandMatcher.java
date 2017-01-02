@@ -48,6 +48,9 @@ public class CommandMatcher {
         addCommand(new CMD_TESTE());                    // POST /templates/{tid}⁄checklists/notclosed/tags
         // Phase 03
         addCommand(new CMD_ServerListen());             // LISTEN /
+        addCommand(new CMD_GetRoot());                  // GET /
+        addCommand(new CMD_GetTagDetail());             // GET /tags/{gid}
+        addCommand(new CMD_GetTagChekLst());           // GET /tags/{gid}/checklists
 
     }
 

@@ -5,53 +5,22 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pt.isel.ls.Containers.Tag;
 
-
-import java.util.LinkedList;
-
 public class Tag2JSON {
-
-    public String toJSON(LinkedList<Tag> tg) {
-
+    public String toJSON(Tag tag) {
         JSONObject obj = new JSONObject();
 
-        JSONObject chk_prop = new JSONObject();
-        JSONArray chk_class = new JSONArray();
-        JSONArray chk_entit = new JSONArray();
+        JSONObject tag_prop = new JSONObject();
+        JSONArray tag_class = new JSONArray();
 
+        tag_class.add("tag");
 
+        tag_prop.put("tagid", tag.tagId);
+        tag_prop.put("name", tag.tagName);
+        tag_prop.put("color", tag.tagColor);
 
-        chk_class.add("tag");
-        chk_class.add("collection");
-
-        chk_prop.put("count", tg.size());
-
-
-        if(tg.size() > 0 ){  // detail (checklist with tasks)
-
-            tg.forEach(x -> {
-
-                JSONObject elem = new JSONObject();
-
-                JSONArray chk_classEl = new JSONArray();
-                JSONObject chk_propEl = new JSONObject();
-
-                chk_classEl.add("tag");
-                chk_propEl.put("name",x.tagName);
-                chk_propEl.put("color",x.tagColor);
-
-                elem.put("class", chk_classEl);
-                elem.put("properties", chk_propEl);
-
-                chk_entit.add(elem);
-
-            });
-        }
-
-        obj.put("class", chk_class);
-        obj.put("properties", chk_prop);
-        obj.put("entities", chk_entit);
+        obj.put("class", tag_class);
+        obj.put("properties", tag_prop);
 
         return obj.toJSONString();
-
     }
 }

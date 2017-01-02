@@ -10,12 +10,14 @@
             margin: 0px auto;
             float: none;
         }
+        .form-centered {
+            margin: 0px auto;
+            width: 80%;
+            float: none;
+        }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script>
-        if(history.length < 3) document.location.href="/";
-    </script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <title>%title%</title>
 </head>
@@ -34,6 +36,30 @@
     </nav>
     %body%
 </div>
+
+<script>
+
+    $(document).ready(function(){
+        $("a.status").click(function(){
+            $.post($(this).attr("url"),{ isClosed: $(this).attr("newstatus") });
+            location.reload();
+        });
+
+        if(window.location.pathname.match("checklists/\\d+"))
+            $.ajax({
+                url: '../tags',
+                type: 'GET',
+                dataType: 'json',
+                accept: 'application/json',
+                success: function() { alert('hello!'); },
+                error: function(req, err){ console.log('my message: ' + err); }
+            });
+
+    });
+
+
+
+</script>
 
 </body>
 </html>

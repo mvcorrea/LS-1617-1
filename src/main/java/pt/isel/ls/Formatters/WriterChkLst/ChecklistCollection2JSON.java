@@ -4,9 +4,6 @@ package pt.isel.ls.Formatters.WriterChkLst;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import pt.isel.ls.Containers.CheckList;
-import pt.isel.ls.Containers.Tag;
-import pt.isel.ls.Debug;
-import pt.isel.ls.Formatters.WriterTag.Tag2JSON;
 
 import java.util.LinkedList;
 
@@ -45,7 +42,7 @@ public class ChecklistCollection2JSON {
 
                 // adding tags
                 JSONArray tags = new JSONArray();
-                //new Tag2JSON(x.tags);
+                //new TagCollection2JSON(x.tags);
 
 
                 x.tags.forEach(tag -> {

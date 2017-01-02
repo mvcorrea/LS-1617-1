@@ -50,6 +50,7 @@ public class CMD_TESTE extends CMD_Generic implements CommandInterface {
 
         this.request = par;
 
+        // TODO: verify if TAG already exist !!!!!! (inserting repeated)
 
         PreparedStatement ps1 = con.prepareStatement(query1);
         PreparedStatement ps2 = con.prepareStatement(query2);

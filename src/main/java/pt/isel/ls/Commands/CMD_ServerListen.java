@@ -1,5 +1,6 @@
 package pt.isel.ls.Commands;
 
+import org.apache.commons.lang.StringUtils;
 import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Helpers.CommandInterface;
 import pt.isel.ls.Helpers.CommandWrapper;
@@ -18,8 +19,10 @@ import pt.isel.ls.Helpers.WebServer.WebServer;
 public class CMD_ServerListen  implements CommandInterface {
     public static String pattern = "(LISTEN /)";
     public RequestParser request;
-    private static final int DEF_PORT = 8080;
+    private int DEF_PORT = 8080;
     public WebServer srv;
+    private int port;
+
 
     @Override
     public RequestParser getRequest() { return request; }
@@ -33,7 +36,8 @@ public class CMD_ServerListen  implements CommandInterface {
         System.setProperty("org.slf4j.simpleLogger.levelInBrackets","true");
         Logger logger = LoggerFactory.getLogger(CMD_ServerListen.class);
         logger.info("Starting main...");
-        this.srv = new WebServer(DEF_PORT, logger).WebParser(new WebParser()).start();
+        port = par.getParams() != null ? Integer.valueOf(par.getParams().get("port")) : DEF_PORT;
+        this.srv = new WebServer(port, logger).WebParser(new WebParser()).start();
         logger.info("main ends.");
         return new CommandWrapper(this);
     }

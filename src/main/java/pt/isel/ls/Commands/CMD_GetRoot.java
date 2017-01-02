@@ -20,6 +20,7 @@ public class CMD_GetRoot extends CMD_Generic implements CommandInterface {
 
     @Override
     public Object process(Connection con, RequestParser par) throws Exception {
+        this.request = par;
         // only allow html mode
         if(par.getHeaders().containsKey("accept") && par.getHeaders().get("accept").equals("text/html}")){
 
@@ -39,7 +40,7 @@ public class CMD_GetRoot extends CMD_Generic implements CommandInterface {
 
     @Override
     public RequestParser getRequest() {
-        return null;
+        return request;
     }
 
     @Override

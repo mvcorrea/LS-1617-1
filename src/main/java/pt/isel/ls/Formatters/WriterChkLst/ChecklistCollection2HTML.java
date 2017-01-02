@@ -5,6 +5,7 @@ import pt.isel.ls.Containers.CheckList;
 import pt.isel.ls.Debug;
 import pt.isel.ls.Formatters.WebFormatter.WebDocument;
 import pt.isel.ls.Formatters.WebFormatter.WebTag;
+import pt.isel.ls.Formatters.WebFormatter.WebText;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -61,9 +62,42 @@ public class ChecklistCollection2HTML {
 
         table.addContent(tbody);
 
+        // FORM
+        WebTag form = new WebTag("form").setAttr("method", "post").setAttr("action", "/checklists").setAttr("class","");
+
+        WebTag formContainer = new WebTag("div").setAttr("class", "row");
+
+        WebTag line1 = new WebTag("div").setAttr("class", "col-xs-3");
+        line1.addContent(new WebTag("label").setAttr("for", "name").setAttr("class", "sr-only").setData("Name"));
+        line1.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "name").setAttr("class","form-control").setAttr("placeholder", "Name"));
+        formContainer.addContent(line1);
+
+        WebTag line2 = new WebTag("div").setAttr("class", "col-xs-5");
+        line2.addContent(new WebTag("label").setAttr("for", "description").setAttr("class", "sr-only").setData("Description"));
+        line2.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "description").setAttr("class","form-control col-xs-5").setAttr("placeholder", "Description"));
+        formContainer.addContent(line2);
+
+        WebTag line3 = new WebTag("div").setAttr("class", "control-label col-xs-2").setAttr("title","format: YYYYMMDD+HHMM");
+        line3.addContent(new WebTag("label").setAttr("for", "dueDate").setAttr("class", "sr-only").setAttr("data-toggle","data-toggle").setData("Due Date"));
+        line3.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "dueDate").setAttr("class","form-control col-xs-2").setAttr("placeholder", "Due Date"));
+        formContainer.addContent(line3);
+
+        WebTag line5 = new WebTag("div").setAttr("class", "col-xs-2");
+        line5.addContent(new WebTag("button").setAttr("type", "submit").setAttr("class", "btn btn-default").setData("Create Checklist"));
+        formContainer.addContent(line5);
+
+        form.addContent(formContainer);
+
+
+
+
+        // format page
         main.addContent(new WebTag("h4").setAttr("class", "text-center").setData("CheckList(s)"));
         main.addContent(table);
-
+        main.addContent(new WebTag("br"));
+        main.addContent(new WebTag("h4").setAttr("class", "text-center").setData("Add New CheckList"));
+        main.addContent(form);
+        main.addContent(new WebTag("br"));
 
         doc.addElem(main);
 

@@ -1,5 +1,6 @@
 package pt.isel.ls;
 
+import org.slf4j.Logger;
 import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Helpers.*;
 
@@ -10,6 +11,9 @@ public class ProcessCmd {
 
     private CommandMatcher commands = new CommandMatcher();
     public String outData;
+    public int id;
+    public Logger logger;
+
 
     // inputs:  the request object with fields parsed
     public ProcessCmd doProcess(RequestParser par) throws Exception {
@@ -24,7 +28,7 @@ public class ProcessCmd {
             String filename = par.getHeaders().get("file-name");
 
             if(filename == null){       // check if data need to be printed to file
-                System.out.println(outData);
+                if(Debug.ON) System.out.println(outData);       // <--------------------------------- output to screen
             } else {
                 if (outData == null) throw new AppException("outData: no data returned");
                 this.toFile(filename, outData);
@@ -32,15 +36,23 @@ public class ProcessCmd {
 
         } else { // the remain commands returns an integer
 
+            //if(par.getMethod().equals("POST")) this.objId = cmd.getCmd().
+
             if(!par.getMethod().equals("OPTIONS")){ // avoid empty data
                 CommandWrapper cw = (CommandWrapper) rep;
-                int id = (int) cw.getCmd().getData();
-                System.out.println("created/updated/deleted id: "+ id);
+                this.id = (int) cw.getCmd().getData();
+                if(Debug.ON) System.out.println("created/updated/deleted id: "+ id);
+                logger.info("created/updated/deleted id: "+ id);
             }
 
         }
 
         conn.close();
+        return this;
+    }
+
+    public ProcessCmd setLogger(Logger logger){
+        this.logger = logger;
         return this;
     }
 

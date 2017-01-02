@@ -24,8 +24,12 @@ public class OutputFormatter {
         container.put("CMD_GetCheckLstOpenNumTsks", new FormatterCheckListCollection());
 
         // phase 02
-        container.put("CMD_GetTag",                 new FormatterTags());
+        container.put("CMD_GetTag",                 new FormatterTagCollection());
 
+        // phase 03
+        container.put("CMD_GetRoot",                new FormatterRoot());
+        container.put("CMD_GetTagDetail",           new FormatterTag());
+        container.put("CMD_GetTagChekLst",          new FormatterCheckListCollection());
 
     }
 

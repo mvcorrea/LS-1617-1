@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 
 public class Task implements ContainerInterface {
-    int tskId;
+    public int tskId;
     public String tskName, tskDesc;
     public Timestamp tskDueDate;
     public boolean tskIsCompleted;
