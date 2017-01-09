@@ -25,59 +25,12 @@ import java.util.regex.Pattern;
 public class WebParser extends HttpServlet {
 
     Logger logger;
-
     private CommandMatcher commands = new CommandMatcher();
-
-    public WebParser() {
-
-    }
+    private ProcessCmd cmd;
+    int createdId;
 
 
-//    @Override
-//    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-//
-//
-//        if(req.getRequestURI().matches("/favicon.*")) return;
-//
-//        logger.info("{} on '{}' with accept:'{}'", req.getMethod(), req.getRequestURI(), req.getHeader("Accept"));
-//
-//        try {
-//
-//            String[] args = formatArgs(req);
-//            RequestParser par = new RequestParser(args);
-//            logger.info(par.toString());
-//            Charset utf8 = Charset.forName("utf-8");
-//
-//            // Normal usage
-//            ProcessCmd cmd  = new ProcessCmd().doProcess(par);
-//            byte[] respBodyBytes = cmd.outData.getBytes(utf8);
-//
-//            // TODO: treat error codes
-//
-//            resp.setStatus(200);
-//            resp.setContentLength(respBodyBytes.length);
-//            resp.setContentType(par.getHeaders().get("accept"));
-//
-//            OutputStream os = resp.getOutputStream();
-//            os.write(respBodyBytes);
-//
-//            os.close();
-//
-//        } catch (URISyntaxException e) {
-//            logger.error("GET URISyntaxException: "+ e.getMessage());
-//            //e.printStackTrace();
-//        } catch (AppException e) {
-//            logger.error("GET AppException: "+ e.getMessage());
-//            //e.printStackTrace();
-//        } catch (SQLException e) {
-//            logger.error("GET SQLException: "+ e.getMessage());
-//            //e.printStackTrace();
-//        } catch (Exception e) {
-//            logger.error("GET Exception: "+ e.getMessage());
-//            //e.printStackTrace();
-//        }
-//
-//    }
+    public WebParser() { }
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -101,45 +54,6 @@ public class WebParser extends HttpServlet {
         }
     }
 
-//    @Override
-//    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-//
-//        logger.info("{} on '{}' with accept:'{}'", req.getMethod(), req.getRequestURI(), req.getHeader("Accept"));
-//
-//        // curl -X POST -G localhost:8080/checklists -d name=chk2016_1 -d description=chk2016_1_desc -d dueDate=20160505\+1300
-//
-//        try {
-//            String[] args = formatArgs(req);
-//            System.out.println(">> "+Arrays.toString(args));
-//            RequestParser par = new RequestParser(args);
-//            logger.info(par.toString());
-//            Charset utf8 = Charset.forName("utf-8");
-//
-//
-//            // Normal usage
-//            ProcessCmd cmd  = new ProcessCmd().doProcess(par);
-//            byte[] respBodyBytes = cmd.outData.getBytes(utf8);
-//
-//
-//            resp.setStatus(303);
-//            resp.setHeader("Location", "http://www.google.com");
-//
-//            OutputStream os = resp.getOutputStream();
-//            os.write(respBodyBytes);
-//
-//            os.close();
-//
-//        } catch (URISyntaxException e) {
-//            logger.error("POST URISyntaxException: "+ e.getMessage());
-//            //e.printStackTrace();
-//        }  catch (Exception e) {
-//            logger.error("POST Exception: " + e.getMessage());
-//            //e.printStackTrace();
-//        }
-//
-//    }
-
-
     public void doRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException, URISyntaxException {
 
         try {
@@ -148,7 +62,19 @@ public class WebParser extends HttpServlet {
             logger.info(par.toString());
             Charset utf8 = Charset.forName("utf-8");
 
-            ProcessCmd cmd  = new ProcessCmd().setLogger(logger).doProcess(par);  // do the heavy lifting
+            try {
+                cmd = new ProcessCmd().setLogger(logger).doProcess(par);  // do the heavy lifting
+            } catch(Exception e){
+               // logger.info(e.getMessage());
+                logger.error("app throw "+ e.getClass().getSimpleName());
+                if(e.getClass().getSimpleName().matches("CommunicationsException")){
+                    logger.info("error 500: server error");
+                    resp.sendError(500);
+                } else {
+                    logger.info("error 400: unable to find resource error");
+                    resp.sendError(404);
+                }
+            }
 
             String method = req.getMethod();
 
@@ -165,16 +91,24 @@ public class WebParser extends HttpServlet {
                 os.close();
 
             } else if (method.equals("POST")){ // POST Request
-                int id = cmd.id; // create|update|delete id
-                //resp.setHeader("Location", resp.encodeRedirectURL(req.getRequestURI()));
-                logger.info(req.getRequestURI() +" -> "+getRedirectURL(req.getRequestURI()));
+                createdId = cmd.id; // create|update|delete id
+                String redirect = getRedirectURL(req.getRequestURI());
 
-                resp.setStatus(303);
-                resp.setHeader("Location", resp.encodeRedirectURL(getRedirectURL(req.getRequestURI())));
+                //resp.setHeader("Location", resp.encodeRedirectURL(req.getRequestURI()));
+                logger.info(req.getRequestURI() +" -> "+ redirect);
+
+                if(redirect.equals("")){
+                    logger.info("500: Server error ");
+                    resp.sendError(500);
+                } else {
+                    resp.setStatus(303);
+                    logger.info("303: Server redirected ");
+                    resp.setHeader("Location", resp.encodeRedirectURL(redirect));
+                }
             }
         } catch (Exception e) {
-            logger.error("Exception ("+req.getMethod()+"): " + e.getMessage());
-            e.printStackTrace();    // TODO: remove latter (4 debugging)
+            logger.error("Exception[doRequest] ("+req.getMethod()+"): " + e.getMessage());
+            //e.printStackTrace();    // TODO: remove later (4 debugging)
         }
 
     }
@@ -182,17 +116,26 @@ public class WebParser extends HttpServlet {
 
     public String getRedirectURL(String reqURL) throws AppException {
 
-        Pattern tskStat = Pattern.compile("/checklists/\\d+/tasks/\\d+");
-        Pattern chkDET  = Pattern.compile("/checklists/\\d+/tasks$");
-        Pattern chkCOL  = Pattern.compile("/checklists$");
-        Pattern tagCOL  = Pattern.compile("/tags$");
+        Pattern chkCOL  = Pattern.compile("/checklists$");                  // create a checklist
+        Pattern chkDET  = Pattern.compile("/checklists/\\d+/tasks$");       // add a tag to a checklist
+        Pattern tskStat = Pattern.compile("/checklists/\\d+/tasks/\\d+");   // change task status on a chklist
+        Pattern tagCOL  = Pattern.compile("/tags$");                        // create a tag
+        Pattern tagChk  = Pattern.compile("/checklists/\\d+/tags$");        // associate a tag to a chklist
+        Pattern chkTag  = Pattern.compile("/tags/\\d+/checklists$");        // from all chcklists associated with a tag
+        Pattern temNew  = Pattern.compile("/templates$");                   // create new template
+        Pattern temDET  = Pattern.compile("/templates/\\d+/create$");       // create new checklist from template
 
-        if(chkCOL.matcher(reqURL).matches()) return "/checklists";
-        if(chkDET.matcher(reqURL).matches()) return "/checklists/"+reqURL.split("/")[2];
-        if(tskStat.matcher(reqURL).matches()) return "/checklists/"+reqURL.split("/")[2];
-        if(tagCOL.matcher(reqURL).matches()) return "/tags";
+        if(chkCOL.matcher(reqURL).matches()) return "/checklists/"+createdId;               // goes to chklist detail
+        if(chkDET.matcher(reqURL).matches()) return "/checklists/"+reqURL.split("/")[2];    // returns to the chklist detail
+        if(tskStat.matcher(reqURL).matches()) return "/checklists/"+reqURL.split("/")[2];   // returns to the chklist detail
+        if(tagCOL.matcher(reqURL).matches()) return "/tags/"+createdId;                     // goes to the tag detail
+        if(tagChk.matcher(reqURL).matches()) return "/checklists/"+reqURL.split("/")[2];    // returns to the chklist detail
+        if(chkTag.matcher(reqURL).matches()) return "/checklists/"+createdId;
+        if(temNew.matcher(reqURL).matches()) return "/templates/"+createdId;
+        if(temDET.matcher(reqURL).matches()) return "/checklists/"+createdId;               // goes to chklist detail when created from template
+
         logger.error("WebParser: error on getRedirectURL");
-        throw new WEBException("error on getRedirectURL");
+        return "";
     }
 
 //    public HttpResponse doHandleErrors(){
@@ -209,12 +152,17 @@ public class WebParser extends HttpServlet {
         out.add(req.getMethod());                                       // method
         String webpath = reqUri.getPath().equals("") ? "/" : reqUri.getPath();  // get root doesnt come with an slash
         out.add(webpath);                                               // path
-        if(req.getHeader("Accept").matches(".*\\*\\/\\*.*")){           // headers
-            if(Debug.ON) System.out.println("> matched");
-            out.add("accept:text/html");
-        }else{
+        //if(req.getHeader("Accept").matches(".*\\*\\/\\*.*")){           // headers
+        if(req.getHeader("Accept").matches(".*text\\/html.*")){
+                if(Debug.ON) System.out.println("> matched");
+            out.add("accept:text/html");    // <----------------------------------------------------------------------
+            //out.add("accept:"+req.getHeader("Accept").toLowerCase());
+        }else if(req.getHeader("Accept").matches(".*application\\/json.*")) {
             if(Debug.ON) System.out.println("> generic");
-            out.add("accept:"+req.getHeader("Accept").toLowerCase());
+            //out.add("accept:"+req.getHeader("Accept").toLowerCase());
+            out.add("accept:application/json");
+        }else if(req.getHeader("Accept").matches(".*text\\/plain.*")){
+            out.add("accept:text/plain");
         }
 
         Map<String, String[]> webParams = req.getParameterMap();        // arguments

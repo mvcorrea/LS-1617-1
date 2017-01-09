@@ -14,17 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
-/*
-
-description:
-comando que dado o parametro git (template id), associa a tag gid a todas as
-checklists nao fechadas e criadas a partir da template tid
-
-POST /templates/2/checklists/notclosed/tags gid=17
-
-*/
-
-
 
 public class CMD_TESTE extends CMD_Generic implements CommandInterface {
 
@@ -42,18 +31,22 @@ public class CMD_TESTE extends CMD_Generic implements CommandInterface {
     public Object process(Connection con, RequestParser par) throws SQLException, AppException, ParseException, java.text.ParseException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, DBException {
         // all checklists not closed from template tid
         String query1 = "SELECT chkId FROM chklst WHERE chkIsCompleted = FALSE AND chkTempl = ?";
+
         // ineting tag associated with checklist
         String query2 = "INSERT INTO chk2tag (xtagId, xchkId) VALUES (?, ?)";
+
+        // test if associated tag already exists
+        String query3 = "SELECT COUNT(*) FROM chk2tag WHERE xchkId = ? AND xtagId = ?";
+
         this.tid = Integer.parseInt(par.getPath()[1]);
         this.gid = Integer.parseInt(par.getParams().get("gid"));
         System.out.println("gid: "+gid+"   tid: "+tid);
 
         this.request = par;
 
-        // TODO: verify if TAG already exist !!!!!! (inserting repeated)
-
         PreparedStatement ps1 = con.prepareStatement(query1);
         PreparedStatement ps2 = con.prepareStatement(query2);
+        PreparedStatement ps3 = con.prepareStatement(query3);
 
         try {
 
@@ -61,22 +54,33 @@ public class CMD_TESTE extends CMD_Generic implements CommandInterface {
 
             ps1.setInt(1, this.tid);
             ResultSet rs1 = ps1.executeQuery();
-            System.out.println(rs1);
 
             while(rs1.next()){
                 int chkId = rs1.getInt("chkId");
-                System.out.println("chkid: "+ chkId);
 
-                // then insert the tags
-                ps2.setInt(1,this.tid);
-                ps2.setInt(2,chkId);
+                // verify if already exists
+                ps3.setInt(1, chkId);
+                ps3.setInt(2, this.tid);
+                System.out.println(ps3.toString());
+                ResultSet rs3 = ps3.executeQuery();
+                rs3.next();
+                int rowCount = rs3.getInt(1);
+                System.out.println(">"+rowCount);
 
-                this.res = ps2.executeUpdate();
+                if(rowCount == 0){  // if doesnt exist insert it
+                    System.out.println("chkid: "+ chkId);
+
+                    // then insert the tags
+                    ps2.setInt(1,this.tid);
+                    ps2.setInt(2,chkId);
+
+                    this.res = ps2.executeUpdate();
+                }
             }
 
         }catch (SQLException e){
             con.rollback();
-            throw new AppException("shit happends! "+ e);
+            throw new AppException("shit happends!"+ e);
         }finally {
             con.commit();
             ps1.close();

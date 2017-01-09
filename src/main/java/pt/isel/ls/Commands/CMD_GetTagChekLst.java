@@ -15,6 +15,9 @@ import java.text.ParseException;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 
+/* get checklist that include the tag */
+
+
 public class CMD_GetTagChekLst implements CommandInterface {
     public static String pattern = "(GET /tags/\\d+/checklists)";
     public RequestParser request;

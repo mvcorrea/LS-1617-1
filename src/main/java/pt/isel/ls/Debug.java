@@ -1,5 +1,5 @@
 package pt.isel.ls;
 
 public class Debug {
-    public static final boolean ON = true;
+    public static final boolean ON = false;
 }

@@ -27,8 +27,17 @@ public class Tag2HTML {
         WebTag tbodyC = new WebTag("tbody").nl();
 
         WebTag rowC = new WebTag("tr").nl();
-        rowC.addContent(new WebTag("td").setData(tag.tagName));
+        rowC.addContent(new WebTag("td").addContent(new WebTag("a")
+                .setAttr("href","/tags/"+tag.tagId+"/checklists").setData(tag.tagName)));
+        //rowC.addContent(new WebTag("td").setData(tag.tagName));
         rowC.addContent(new WebTag("td").setData(tag.tagColor));
+
+
+        // checklists with that tag
+
+
+
+
 
         tbodyC.addContent(rowC);
         tableC.addContent(tbodyC);

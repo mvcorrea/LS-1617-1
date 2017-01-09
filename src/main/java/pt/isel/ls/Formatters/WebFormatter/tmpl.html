@@ -40,8 +40,14 @@
 <script>
 
     $(document).ready(function(){
+
         $("a.status").click(function(){
             $.post($(this).attr("url"),{ isClosed: $(this).attr("newstatus") });
+            location.reload();
+        });
+
+        $("a.tags").click(function(){
+            $.get($(this).attr("url"));
             location.reload();
         });
 
@@ -51,7 +57,10 @@
                 type: 'GET',
                 dataType: 'json',
                 accept: 'application/json',
-                success: function() { alert('hello!'); },
+                success: function(result) { var tags = result.entities; $.each(tags, function(i,item){
+                    var data = $("<option value="+item.properties.id+">"+item.properties.name+"</option>");
+                    $("#combo").append(data);
+                }); },
                 error: function(req, err){ console.log('my message: ' + err); }
             });
 

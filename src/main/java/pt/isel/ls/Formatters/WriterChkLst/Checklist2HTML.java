@@ -73,36 +73,28 @@ public class Checklist2HTML {
         tbodyC.addContent(rowC);
         tableC.addContent(tbodyC);
 
+
         // FORM TAG
         WebTag form0 = new WebTag("form").setAttr("method", "post").setAttr("action", "/checklists/"+chk.chkId+"/tags").setAttr("class","");    // do a combobox with all possible options
         WebTag formContainer0 = new WebTag("div").setAttr("class", "row center");
-
-        WebTag selbox = new WebTag("select").setAttr("class", "form-control col-xs-5");
-        selbox.addContent(new WebTag("option").setAttr("value", "1").setData("option1"));
-        selbox.addContent(new WebTag("option").setAttr("value", "2").setData("option2"));
-        formContainer0.addContent(new WebTag("spam").setAttr("class", "col-xs-2"));
-        formContainer0.addContent(selbox);
+        formContainer0.addContent(new WebTag("spam").setAttr("class", "col-xs-4"));  // space for the combobox
 
 
-
-//        WebTag line01 = new WebTag("div").setAttr("class", "col-xs-3");
-//        line01.addContent(new WebTag("label").setAttr("for", "name").setAttr("class", "sr-only").setData("Name"));
-//        line01.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "name").setAttr("class","form-control").setAttr("placeholder", "Name"));
-//        formContainer0.addContent(line01);
-//
-//        WebTag line02 = new WebTag("div").setAttr("class", "col-xs-5");
-//        line02.addContent(new WebTag("label").setAttr("for", "color").setAttr("class", "sr-only").setData("Color"));
-//        line02.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "color").setAttr("class","form-control col-xs-5").setAttr("placeholder", "Color"));
-//        formContainer0.addContent(line02);
-
-        WebTag line03 = new WebTag("div").setAttr("class", "col-xs-2");
-        line03.addContent(new WebTag("button").setAttr("type", "submit").setAttr("class", "btn btn-default").setData("add Tag"));
+        WebTag line03 = new WebTag("div").setAttr("class", "col-xs-3");
+        WebTag selbox = new WebTag("select").setAttr("class", "form-control").setAttr("id", "combo").setAttr("name","gid");
+        line03.addContent(selbox);
         formContainer0.addContent(line03);
-        formContainer0.addContent(new WebTag("spam").setAttr("class", "col-xs-2"));
+
+
+        //formContainer0.addContent(new WebTag("spam").setAttr("class", ""));
+        //formContainer0.addContent(selbox);
+
+        WebTag line04 = new WebTag("div").setAttr("class", "col-xs-2");
+        line04.addContent(new WebTag("button").setAttr("type", "submit").setAttr("class", "btn btn-default").setData("add Tag"));
+        formContainer0.addContent(line04);
+        //formContainer0.addContent(new WebTag("spam").setAttr("class", "col-xs-2"));
 
         form0.addContent(formContainer0);
-
-
 
 
         // TASKS
