@@ -63,7 +63,7 @@ public class ChecklistCollection2HTML {
         table.addContent(tbody);
 
         // FORM
-        WebTag form = new WebTag("form").setAttr("method", "post").setAttr("action", "/checklists").setAttr("class","");
+        WebTag form = new WebTag("form").setAttr("method", "post").setAttr("action", "/checklists").setAttr("class","").setAttr("name", "addchk");
 
         WebTag formContainer = new WebTag("div").setAttr("class", "row");
 

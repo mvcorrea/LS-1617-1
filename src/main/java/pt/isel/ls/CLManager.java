@@ -1,6 +1,8 @@
 package pt.isel.ls;
 import pt.isel.ls.Helpers.*;
 
+import java.util.Arrays;
+
 public class CLManager {
 
     // create a tag
@@ -19,6 +21,7 @@ public class CLManager {
 
         try {
             RequestParser par = new RequestParser(args);
+            //System.out.println(Arrays.toString(args));
             new ProcessCmd().doProcess(par);
         } catch (Exception e){
             System.out.println("Error> " + e.getMessage());

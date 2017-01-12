@@ -4,10 +4,12 @@ import org.json.simple.JSONObject;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 
 public class Tag implements ContainerInterface {
     public int tagId;
     public String tagName, tagColor;
+    public LinkedList<CheckList> chks = new LinkedList<>();
 
     public Tag() {}
 
@@ -16,6 +18,10 @@ public class Tag implements ContainerInterface {
         this.tagName = rs.getString("tagName");
         this.tagColor = rs.getString("tagColor");
         return this;
+    }
+
+    public void fillChks(){
+
     }
 
     public Tag getTag(){

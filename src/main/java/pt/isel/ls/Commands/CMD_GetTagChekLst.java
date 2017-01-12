@@ -62,6 +62,8 @@ public class CMD_GetTagChekLst implements CommandInterface {
         return new CommandWrapper(this);
     }
 
+    public LinkedList<CheckList> getChks(){ return cls; }
+
     @Override
     public boolean validate(RequestParser par) throws AppException, ParseException {
         return false;

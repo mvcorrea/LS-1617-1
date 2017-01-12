@@ -1,6 +1,7 @@
 package pt.isel.ls.Commands;
 
 
+import pt.isel.ls.Containers.CheckList;
 import pt.isel.ls.Containers.Tag;
 import pt.isel.ls.Debug;
 import pt.isel.ls.Exceptions.AppException;
@@ -14,12 +15,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.LinkedList;
 import java.util.regex.Pattern;
 
 public class CMD_GetTagDetail implements CommandInterface {
     public static String pattern = "(GET /tags/\\d+)";
     public RequestParser request;
     public Tag tp = new Tag();
+    public int tid;
 
     @Override
     public RequestParser getRequest() { return request; }
@@ -32,8 +35,12 @@ public class CMD_GetTagDetail implements CommandInterface {
         // get the template
         String query1 = "SELECT * FROM tag WHERE tagId = ?";
 
+
         this.request = par;
-        int tid = Integer.parseInt(par.getPath()[1]);
+        tid = Integer.parseInt(par.getPath()[1]);
+
+        // fill checklists with the tag
+        getChecklistsFromTag(con);
 
         try {
 
@@ -53,6 +60,26 @@ public class CMD_GetTagDetail implements CommandInterface {
 
         return new CommandWrapper(this);
     }
+
+    public void getChecklistsFromTag(Connection con) throws Exception {
+        CommandWrapper chkWithTag = new CommandWrapper(new CMD_GetTagChekLst());
+        String[] args = { "GET", "/tags/"+String.valueOf(tid)+"/checklists" };
+        RequestParser par = new RequestParser(args);
+        //System.out.println(par);
+
+        try {
+            Object data = chkWithTag.getCmd().process(con, par);
+            CommandWrapper cw = (CommandWrapper) data;
+            tp.chks = (LinkedList<CheckList>) cw.getCmd().getData();
+        } catch (Exception e) {
+            throw new AppException("getChecklistsFromTag");
+            //e.printStackTrace();
+        }
+
+        //System.out.println(tp.chks.size());
+
+    }
+
 
     @Override
     public boolean validate(RequestParser par) throws AppException, ParseException {

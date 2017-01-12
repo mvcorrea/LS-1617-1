@@ -74,6 +74,7 @@ public class CMD_PostTask2CheckLst extends CMD_Generic implements CommandInterfa
                 ps2.setInt(1, chkId);
                 ps2.setString(2, par.getParams().get("name"));
                 ps2.setString(3, par.getParams().get("description"));
+                //ps2.setTimestamp(4, par.getParams().get("dueDate") != null ? str2ts(par.getParams().get("dueDate")) : null);
                 ps2.setTimestamp(4, this.tskDueDate);
 
                 ps2.execute();

@@ -41,16 +41,6 @@
 
     $(document).ready(function(){
 
-        $("a.status").click(function(){
-            $.post($(this).attr("url"),{ isClosed: $(this).attr("newstatus") });
-            location.reload();
-        });
-
-        $("a.tags").click(function(){
-            $.get($(this).attr("url"));
-            location.reload();
-        });
-
         if(window.location.pathname.match("checklists/\\d+"))
             $.ajax({
                 url: '../tags',
@@ -64,8 +54,17 @@
                 error: function(req, err){ console.log('my message: ' + err); }
             });
 
-    });
+        $("a.status").click(function(){
+            $.post($(this).attr("url"),{ isClosed: $(this).attr("newstatus") });
+            location.reload();
+        });
 
+        $("a.tags").click(function(){
+            $.get($(this).attr("url"));
+            location.reload();
+        });
+
+    });
 
 
 </script>

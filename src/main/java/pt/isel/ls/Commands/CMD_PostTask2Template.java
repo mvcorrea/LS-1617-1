@@ -31,7 +31,7 @@ public class CMD_PostTask2Template implements CommandInterface {
     public Object process(Connection con, RequestParser par) throws SQLException, ParseException, AppException {
 
         String query1 = "SELECT * FROM templ WHERE temId = ?";
-        String query2 = "INSERT INTO task (tskTemId, tskName, tskDesc) VALUES (?, ?, ?)";
+        String query2 = "INSERT INTO task (tskTemId, tskName, tskDesc, tskIsCompleted) VALUES (?, ?, ?, TRUE )";
         this.request = par;
 
         int temId = Integer.parseInt(par.getPath()[1]);

@@ -61,6 +61,8 @@ public class WebParser extends HttpServlet {
             RequestParser par = new RequestParser(args);        // parser object
             logger.info(par.toString());
             Charset utf8 = Charset.forName("utf-8");
+            if(Debug.ON) System.out.println(Arrays.toString(args));
+
 
             try {
                 cmd = new ProcessCmd().setLogger(logger).doProcess(par);  // do the heavy lifting
@@ -124,6 +126,7 @@ public class WebParser extends HttpServlet {
         Pattern chkTag  = Pattern.compile("/tags/\\d+/checklists$");        // from all chcklists associated with a tag
         Pattern temNew  = Pattern.compile("/templates$");                   // create new template
         Pattern temDET  = Pattern.compile("/templates/\\d+/create$");       // create new checklist from template
+        Pattern temTsk  = Pattern.compile("/templates/\\d+/tasks$");       // create new checklist from template
 
         if(chkCOL.matcher(reqURL).matches()) return "/checklists/"+createdId;               // goes to chklist detail
         if(chkDET.matcher(reqURL).matches()) return "/checklists/"+reqURL.split("/")[2];    // returns to the chklist detail
@@ -133,6 +136,8 @@ public class WebParser extends HttpServlet {
         if(chkTag.matcher(reqURL).matches()) return "/checklists/"+createdId;
         if(temNew.matcher(reqURL).matches()) return "/templates/"+createdId;
         if(temDET.matcher(reqURL).matches()) return "/checklists/"+createdId;               // goes to chklist detail when created from template
+        if(temTsk.matcher(reqURL).matches()) return "/templates/"+reqURL.split("/")[2];               // goes to chklist detail when created from template
+
 
         logger.error("WebParser: error on getRedirectURL");
         return "";

@@ -43,10 +43,12 @@ public class Template2HTML {
         tbodyT.addContent(rowT);
         tableT.addContent(tbodyT);
 
-
+        // add line
         WebTag main = new WebTag("div").setAttr("class", "container");
         main.addContent(new WebTag("h4").setAttr("class", "text-center").setData("Template"));
+        main.addContent(new WebTag("br"));
         main.addContent(tableT);
+        main.addContent(new WebTag("br"));
 
 
 
@@ -72,10 +74,44 @@ public class Template2HTML {
             rowTk.addContent(new WebTag("td").setData(x.tskIsCompleted?"True":"False"));
             tbody.addContent(rowTk);
         });
-
+        // add line
         tableTk.addContent(tbody);
         main.addContent(new WebTag("h4").setAttr("class", "text-center").setData("Template's tasks"));
+        main.addContent(new WebTag("br"));
         main.addContent(tableTk);
+        main.addContent(new WebTag("br"));
+
+
+        // FORM ADD TASK
+        WebTag form0 = new WebTag("form").setAttr("method", "post").setAttr("action", "/templates/"+tmpl.temId+"/tasks").setAttr("class","");
+
+        WebTag formContainer0 = new WebTag("div").setAttr("class", "row center");
+
+        WebTag line1t = new WebTag("div").setAttr("class", "col-xs-3");
+        line1t.addContent(new WebTag("label").setAttr("for", "name").setAttr("class", "sr-only").setData("Name"));
+        line1t.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "name").setAttr("class","form-control").setAttr("placeholder", "Name"));
+        formContainer0.addContent(line1t);
+
+        WebTag line2t = new WebTag("div").setAttr("class", "col-xs-5");
+        line2t.addContent(new WebTag("label").setAttr("for", "description").setAttr("class", "sr-only").setData("Description"));
+        line2t.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "description").setAttr("class","form-control col-xs-5").setAttr("placeholder", "Description"));
+        formContainer0.addContent(line2t);
+
+//        WebTag line3t = new WebTag("div").setAttr("class", "control-label col-xs-2").setAttr("title","format: YYYYMMDD+HHMM");
+//        line3t.addContent(new WebTag("label").setAttr("for", "dueDate").setAttr("class", "sr-only").setAttr("data-toggle","data-toggle").setData("Due Date"));
+//        line3t.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "dueDate").setAttr("class","form-control col-xs-2").setAttr("placeholder", "Due Date"));
+//        formContainer0.addContent(line3t);
+
+        WebTag line5t = new WebTag("div").setAttr("class", "col-xs-2");
+        line5t.addContent(new WebTag("button").setAttr("type", "submit").setAttr("class", "btn btn-default").setData("Create Task"));
+        formContainer0.addContent(line5t);
+        // add line
+        form0.addContent(formContainer0);
+        main.addContent(new WebTag("h4").setAttr("class", "text-center").setData("Add New Task"));
+        main.addContent(new WebTag("br"));
+        main.addContent(form0);
+        main.addContent(new WebTag("br"));
+
 
 
         // CHECKLISTS
@@ -100,67 +136,49 @@ public class Template2HTML {
             //row.addContent(new WebTag("td").setData(tags));
             tbodyC.addContent(row);
         });
-
+        // add line
         tableC.addContent(tbodyC);
-
-
-
-        // FORM
-        WebTag form = new WebTag("form").setAttr("method", "post").setAttr("action", "/templates/"+tmpl.temId+"/create").setAttr("class","");
-
-        WebTag formContainer = new WebTag("div").setAttr("class", "row");
-
-        WebTag line1 = new WebTag("div").setAttr("class", "col-xs-3");
-        line1.addContent(new WebTag("label").setAttr("for", "name").setAttr("class", "sr-only").setData("Name"));
-        line1.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "name").setAttr("class","form-control").setAttr("placeholder", "Name"));
-        formContainer.addContent(line1);
-
-        WebTag line2 = new WebTag("div").setAttr("class", "col-xs-5");
-        line2.addContent(new WebTag("label").setAttr("for", "description").setAttr("class", "sr-only").setData("Description"));
-        line2.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "description").setAttr("class","form-control col-xs-5").setAttr("placeholder", "Description"));
-        formContainer.addContent(line2);
-
-        WebTag line3 = new WebTag("div").setAttr("class", "control-label col-xs-2").setAttr("title","format: YYYYMMDD+HHMM");
-        line3.addContent(new WebTag("label").setAttr("for", "dueDate").setAttr("class", "sr-only").setAttr("data-toggle","data-toggle").setData("Due Date"));
-        line3.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "dueDate").setAttr("class","form-control col-xs-2").setAttr("placeholder", "Due Date"));
-        formContainer.addContent(line3);
-
-        WebTag line5 = new WebTag("div").setAttr("class", "col-xs-2");
-        line5.addContent(new WebTag("button").setAttr("type", "submit").setAttr("class", "btn btn-default").setData("Create Checklist"));
-        formContainer.addContent(line5);
-
-        form.addContent(formContainer);
-
-
-
         main.addContent(new WebTag("h4").setAttr("class", "text-center").setData("Template's Checklists"));
+        main.addContent(new WebTag("br"));
         main.addContent(tableC);
         main.addContent(new WebTag("br"));
+
+
+
+
+        // FORM ADD CHKLIST
+        WebTag form1 = new WebTag("form").setAttr("method", "post").setAttr("action", "/templates/"+tmpl.temId+"/create").setAttr("class","");
+
+        WebTag formContainer1 = new WebTag("div").setAttr("class", "row");
+
+        WebTag line1c = new WebTag("div").setAttr("class", "col-xs-3");
+        line1c.addContent(new WebTag("label").setAttr("for", "name").setAttr("class", "sr-only").setData("Name"));
+        line1c.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "name").setAttr("class","form-control").setAttr("placeholder", "Name"));
+        formContainer1.addContent(line1c);
+
+        WebTag line2c = new WebTag("div").setAttr("class", "col-xs-5");
+        line2c.addContent(new WebTag("label").setAttr("for", "description").setAttr("class", "sr-only").setData("Description"));
+        line2c.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "description").setAttr("class","form-control col-xs-5").setAttr("placeholder", "Description"));
+        formContainer1.addContent(line2c);
+
+        WebTag line3c = new WebTag("div").setAttr("class", "control-label col-xs-2").setAttr("title","format: YYYYMMDD+HHMM");
+        line3c.addContent(new WebTag("label").setAttr("for", "dueDate").setAttr("class", "sr-only").setAttr("data-toggle","data-toggle").setData("Due Date"));
+        line3c.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "dueDate").setAttr("class","form-control col-xs-2").setAttr("placeholder", "Due Date"));
+        formContainer1.addContent(line3c);
+
+        WebTag line5c = new WebTag("div").setAttr("class", "col-xs-2");
+        line5c.addContent(new WebTag("button").setAttr("type", "submit").setAttr("class", "btn btn-default").setData("Create Checklist"));
+        formContainer1.addContent(line5c);
+        // add line
+        form1.addContent(formContainer1);
         main.addContent(new WebTag("h4").setAttr("class", "text-center").setData("Create Checklist from Template"));
-        main.addContent(form);
+        main.addContent(new WebTag("br"));
+        main.addContent(form1);
+        main.addContent(new WebTag("br"));
+
 
         doc.addElem(main);
 
-
-//        StringJoiner joiner = new StringJoiner(", ");
-//        if(tmpl.checklists.size() > 0){
-//            tmpl.checklists.forEach( x -> {
-//                joiner.add(String.valueOf(x.chkId));
-//            });
-//        }
-//
-//        doc.addElem(new WebTag("p").setData(tmpl.temName +" - "+  tmpl.temDesc +" - ["+ joiner.toString() +"]"));
-//        WebTag list = new WebTag("ul");
-//
-//
-//
-//        if(tmpl.tasks.size() > 0 ) {  // detail (checklist with tasks)
-//            tmpl.tasks.forEach(x -> {
-//                list.addContent(new Task2HTML().toHTML(x));
-//            });
-//        }
-//
-//        doc.addElem(list);
 
         return doc.toString();
     }
