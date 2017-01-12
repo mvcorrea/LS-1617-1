@@ -41,6 +41,8 @@
 
     $(document).ready(function(){
 
+        var colors = ["red", "green", "blue", "yellow", "pink", "orange", "black"];
+
         if(window.location.pathname.match("checklists/\\d+"))
             $.ajax({
                 url: '../tags',
@@ -54,6 +56,12 @@
                 error: function(req, err){ console.log('my message: ' + err); }
             });
 
+        if(window.location.pathname.match("/tags$"))
+            $.each(colors, function(i, p) {
+                $("#colorlst").append($("<option></option>").val(p).html(p));
+            });
+
+
         $("a.status").click(function(){
             $.post($(this).attr("url"),{ isClosed: $(this).attr("newstatus") });
             location.reload();
@@ -63,6 +71,8 @@
             $.get($(this).attr("url"));
             location.reload();
         });
+
+        console.log(location);
 
     });
 

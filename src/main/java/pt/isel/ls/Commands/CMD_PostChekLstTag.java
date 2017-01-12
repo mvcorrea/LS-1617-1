@@ -30,20 +30,42 @@ public class CMD_PostChekLstTag implements CommandInterface {
 
     @Override
     public Object process(Connection con, RequestParser par) throws SQLException, AppException {
-        String query = "INSERT INTO chk2tag (xtagId, xchkId) VALUES (?, ?)";
+        String query1 = "SELECT COUNT(*) FROM chk2tag WHERE xtagId = ? AND xchkId = ?"; // verify if tag relation already exists
+        String query2 = "INSERT INTO chk2tag (xtagId, xchkId) VALUES (?, ?)";
         this.request = par;
-        this.cid = Integer.parseInt(par.getPath()[1]);
+        this.cid = Integer.parseInt(par.getPath()[1]);  // checklist
+
+        PreparedStatement ps1 = con.prepareStatement(query1);
+        PreparedStatement ps2 = con.prepareStatement(query2, PreparedStatement.RETURN_GENERATED_KEYS);
 
         try {
 
-            PreparedStatement ps = con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, Integer.valueOf(par.getParams().get("gid")));
-            ps.setInt(2, this.cid);
-            ps.execute();
-            ResultSet rs = ps.getGeneratedKeys();
-            this.assoc = rs.next() ? rs.getInt(1) : 0;
+            con.setAutoCommit(false);
 
-        } catch (SQLException e){ throw new DBException( e.getMessage()); }
+            ps1.setInt(1, Integer.valueOf(par.getParams().get("gid")));
+            ps1.setInt(2, this.cid);
+            ResultSet rs1 = ps1.executeQuery();
+
+            if(rs1.next()){
+                int rowCount = rs1.getInt(1);
+                System.out.println("!!>"+rowCount);
+                if(rowCount == 0){ // without tag for this chklst
+                    ps2.setInt(1, Integer.valueOf(par.getParams().get("gid")));
+                    ps2.setInt(2, this.cid);
+                    ps2.execute();
+                    ResultSet rs = ps2.getGeneratedKeys();
+                    this.assoc = rs.next() ? rs.getInt(1) : 0;
+                }
+            }
+        } catch (SQLException e){
+            con.rollback();
+            throw new DBException( e.getMessage());
+        } finally {
+            con.commit();
+            ps2.close();
+            ps1.close();
+        }
+
 
         return new CommandWrapper(this);
     }

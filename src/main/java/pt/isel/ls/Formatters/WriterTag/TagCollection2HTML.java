@@ -55,9 +55,14 @@ public class TagCollection2HTML {
         line1.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "name").setAttr("class","form-control").setAttr("placeholder", "Name"));
         formContainer.addContent(line1);
 
+//        WebTag line2 = new WebTag("div").setAttr("class", "col-xs-3");
+//        line2.addContent(new WebTag("label").setAttr("for", "name").setAttr("class", "sr-only").setData("Color"));
+//        line2.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "color").setAttr("class","form-control").setAttr("placeholder", "Color"));
+//        formContainer.addContent(line2);
+
         WebTag line2 = new WebTag("div").setAttr("class", "col-xs-3");
-        line2.addContent(new WebTag("label").setAttr("for", "name").setAttr("class", "sr-only").setData("Color"));
-        line2.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "color").setAttr("class","form-control").setAttr("placeholder", "Color"));
+        line2.addContent(new WebTag("select").setAttr("for", "name").setAttr("class", "form-control").setAttr("id", "colorlst").setAttr("name", "color"));
+        //line2.addContent(new WebTag("input").setAttr("type", "text").setAttr("name", "color").setAttr("class","form-control").setAttr("placeholder", "Color"));
         formContainer.addContent(line2);
 
 
