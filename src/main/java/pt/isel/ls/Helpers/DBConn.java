@@ -6,6 +6,8 @@ import pt.isel.ls.Debug;
 import pt.isel.ls.Exceptions.AppException;
 import pt.isel.ls.Exceptions.DBException;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -31,11 +33,18 @@ public class DBConn {
             e.printStackTrace();
         }
         if(Debug.ON) System.out.println("connect to DB " + env);
-        dataSource.setServerName(env.get("server"));
+        try {
+            String srvName = InetAddress.getByName(env.get("server")).getHostAddress().toString();
+            System.out.println(srvName);
+            dataSource.setServerName(srvName);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         dataSource.setPort(3306);
         dataSource.setUser(env.get("user"));
         dataSource.setPassword(env.get("password"));
         dataSource.setDatabaseName(env.get("database"));
+        System.out.println(env.get("database"));
     }
 
     private static HashMap<String,String> parseEnv() throws AppException {
@@ -48,8 +57,13 @@ public class DBConn {
                                                       .collect(Collectors.toMap(e -> e[0], e -> e[1]));
     }
 
-    public static Connection getConnection() throws DBException, SQLException {
-        return dataSource.getConnection();
+    public static Connection getConnection() throws Exception {
+        try {
+            return dataSource.getConnection();
+        } catch (Exception e){
+            throw new Exception("getConnection: "+ e.getMessage() );
+        }
+
     }
 
 }

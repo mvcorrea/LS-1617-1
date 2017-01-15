@@ -14,6 +14,8 @@ create account in heroku
 ! usage
 heroku config
 heroku logs --tail
+heroku restart -a s1617-1-li41n-g15
+
 
 
 
