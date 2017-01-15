@@ -1,0 +1,15 @@
+create a db on db4free.net (ls_isel)
+create account in heroku
+
+> heroku login   !user/pass
+
+! create/edit files..
+
+> heroku create s1617-1-LI41N-G15
+> git push heroku master
+
+! set up env vars
+> heroku config:set LS_DBCONN_TEST_PSQL=server=db4free.net;database=ls_isel;user=ls_isel_user;password=ls_isel_pass
+
+! usage
+heroku config

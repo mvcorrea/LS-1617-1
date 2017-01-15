@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'idea'
+apply plugin: 'application'
 
 version = '1.0'
 
@@ -33,6 +33,11 @@ task initDb(type:Exec, description: 'Setting up test database') {
 //    envVars['PASSWORD'] = "dbuser"
 //    environment << envVars
 //}
+
+
+mainClassName = "pt.isel.ls.CLManager"
+task stage(dependsOn: ['clean', 'installApp'])
+
 
 test.dependsOn initDb
 

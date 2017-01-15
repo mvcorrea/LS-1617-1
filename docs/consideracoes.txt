@@ -1,0 +1,9 @@
+consderacoes
+
+- uma checklist quando criada sem data, todas as tasks inslusas nao poderao ter data (devolve 404).
+- uma checklist criada com data, as tasks deverao ter data anterior a da checklist (devolve 404).
+- se todas as tasks de uma checklist forem fechadas a mesma ira ser fechada.
+-
+
+
+.

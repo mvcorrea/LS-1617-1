@@ -32,6 +32,7 @@ public class DBConn {
         }
         if(Debug.ON) System.out.println("connect to DB " + env);
         dataSource.setServerName(env.get("server"));
+        dataSource.setPort(3306);
         dataSource.setUser(env.get("user"));
         dataSource.setPassword(env.get("password"));
         dataSource.setDatabaseName(env.get("database"));
