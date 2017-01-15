@@ -35,7 +35,7 @@ public class DBConn {
         if(Debug.ON) System.out.println("connect to DB " + env);
         try {
             String srvName = InetAddress.getByName(env.get("server")).getHostAddress().toString();
-            System.out.println(srvName);
+            //System.out.println(srvName);
             dataSource.setServerName(srvName);
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public class DBConn {
         dataSource.setUser(env.get("user"));
         dataSource.setPassword(env.get("password"));
         dataSource.setDatabaseName(env.get("database"));
-        System.out.println(env.get("database"));
+        //System.out.println(env.get("database"));
     }
 
     private static HashMap<String,String> parseEnv() throws AppException {

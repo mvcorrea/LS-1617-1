@@ -4,6 +4,26 @@ create account in heroku
 > heroku login   !user/pass
 
 ! create/edit files..
+procfile: ---------------------------
+web: java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager LISTEN / port=$PORT
+
+settings.gradle: --------------------
+rootProject.name = '1617-1-LI41N-G15'
+
+build.gradle: -----------------------
+apply plugin: 'java'
+apply plugin: 'application'
+
+version = '1.0'
+
+dependencies {
+    compile fileTree(dir: 'vendor/main', include: '*.jar')
+    testCompile fileTree(dir: 'vendor/test', include: '*.jar')
+}
+
+mainClassName = "pt.isel.ls.CLManager"
+task stage(dependsOn: ['clean', 'installApp'])
+-------------------------------------
 
 > heroku create s1617-1-li41n-g15   !low case only
 > git push heroku master
