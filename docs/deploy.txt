@@ -10,12 +10,13 @@ create account in heroku
 
 ! set up env vars
 > heroku config:set LS_DBCONN_TEST_PSQL="server=db4free.net;database=ls_isel;user=ls_isel_user;password=ls_isel_pass"
+> heroku config:set PORT=8080
 
 ! usage
 heroku config
 heroku logs --tail
 heroku restart -a s1617-1-li41n-g15
-
+heroku open
 
 
 

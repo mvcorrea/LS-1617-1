@@ -19,7 +19,7 @@ import pt.isel.ls.Helpers.WebServer.WebServer;
 public class CMD_ServerListen  implements CommandInterface {
     public static String pattern = "(LISTEN /)";
     public RequestParser request;
-    private int DEF_PORT = 80;
+    private int DEF_PORT = 8080;
     public WebServer srv;
     private int port;
 
