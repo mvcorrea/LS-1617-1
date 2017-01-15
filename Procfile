@@ -1,1 +1,1 @@
-web: java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager
+web: java -cp "vendor/main/*:build/classes/main" pt.isel.ls.CLManager LISTEN /
